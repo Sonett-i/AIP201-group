@@ -1,0 +1,9 @@
+AIP:201: Group Project Document
+
+2D Shooter using:
+SAT Collision Detection
+Boids
+
+Sam: SAT
+Nicholas: Boids
+
