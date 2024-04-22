@@ -5,5 +5,16 @@ SAT Collision Detection
 Boids
 
 Sam: SAT
+Research
+
 Nicholas: Boids
+
+• Separation
+• Cohesion
+• Alignment
+• Avoidance
+
+Object Avoidance
+Leader behavior
+Triangles/Arrows
 
