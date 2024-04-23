@@ -68,8 +68,14 @@ public class PhysicsEngine : MonoBehaviour
 
     void UpdatePositions()
 	{
-
-	}
+        foreach (PhysicsBody body in physicsBodies)
+        {
+            if (body)
+            {
+                body.Move(body.LinearVelocity * Time.deltaTime);
+            }
+        }
+    }
 
     void BroadPhase()
 	{
@@ -80,16 +86,12 @@ public class PhysicsEngine : MonoBehaviour
 	{
         physicsBodies.AddRange(GameObject.FindObjectsOfType<PhysicsBody>());
         physicsColliders.AddRange(GameObject.FindObjectsOfType<PhysicsCollider>());
+        initialized = true;
 	}
 
     // Start is called before the first frame update
     void Start()
     {
-        if (Gravity == Vector3.zero)
-		{
-            Gravity = PhysicsConfig.Gravity;
-		}
-
         Initialize();
 
         if (simulationType == SimulationType.BROAD_PHASE)
