@@ -2,26 +2,38 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PhysicsCollider : MonoBehaviour
+
+/*  File: Physics Collider
+ * 
+ *      Individual collider component that stores collider geometry information. Does not handle collision logic.
+ */
+
+namespace PhysicsEngine.Colliders
 {
-    public enum Shape
-	{
-        Circle,
-        AABB,
-        OBB,
-        Polygon
+    public class PhysicsCollider : MonoBehaviour
+    {
+        public PhysicsCollisions.ColliderShapes colliderShape = PhysicsCollisions.ColliderShapes.Circle;
+
+        // Objects this collider is colliding with.
+        public List<PhysicsCollider> collidingObjects = new List<PhysicsCollider>();
+
+        public bool requiresUpdate = true;
+
+        // Start is called before the first frame update
+        void Start()
+        {
+
+        }
+
+        // Update is called once per frame
+        void Update()
+        {
+
+        }
+
+		private void OnDrawGizmos()
+		{
+			
+		}
 	}
-
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

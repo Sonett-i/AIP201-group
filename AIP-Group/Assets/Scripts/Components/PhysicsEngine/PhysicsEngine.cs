@@ -1,114 +1,120 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using PhysicsEngine.Colliders;
+using PhysicsEngine.PhysicsBodies;
 
-public class PhysicsEngine : MonoBehaviour
+namespace PhysicsEngine.Engine
 {
-    public enum SimulationType
-	{
-        BROAD_PHASE,
-        NARROW_PHASE
-	}
-
-    List<PhysicsBody> physicsBodies = new List<PhysicsBody>();
-    List<PhysicsCollider> physicsColliders = new List<PhysicsCollider>();
-
-	[SerializeField] Vector3 Gravity = Vector3.zero;
-
-    bool initialized = false;
-
-    public SimulationType simulationType;
-
-    void UpdateVelocity()
-	{
-        foreach (PhysicsBody body in physicsBodies)
-		{
-            body.AddForce(body.Acceleration, PhysicsBody.ForceType.Impulse);
-            body.AddForce(Gravity, PhysicsBody.ForceType.Impulse);
-		}
-	}
-
-    void UpdateCollisions()
-	{
-        for (int i = 0; i < physicsColliders.Count - 1; i++)
-		{
-            PhysicsCollider colliderA = physicsColliders[i];
-
-            for (int j = i + 1; j < physicsColliders.Count; j++)
-			{
-                PhysicsCollider colliderB = physicsColliders[j];
-
-                // skip if both are static...
-            }
-		}
-	}
-
-    void HandleGravity()
-	{
-        for (int i = 0; i < physicsBodies.Count - 1; i++)
+    public class PhysicsEngine : MonoBehaviour
+    {
+        public enum SimulationType
         {
-            PhysicsBody bodyA = physicsBodies[i];
+            BROAD_PHASE,
+            NARROW_PHASE
+        }
 
-            for (int j = i + 1; j < physicsBodies.Count; j++)
+        List<PhysicsBody> physicsBodies = new List<PhysicsBody>();
+        List<PhysicsCollider> physicsColliders = new List<PhysicsCollider>();
+
+        [SerializeField] Vector3 Gravity = Vector3.zero;
+
+        bool initialized = false;
+
+        public SimulationType simulationType;
+
+        void UpdateVelocity()
+        {
+            foreach (PhysicsBody body in physicsBodies)
             {
-                PhysicsBody bodyB = physicsBodies[j];
-
-                Vector3 direction = (bodyB.transform.position - bodyA.transform.position);
-
-                // Physics Calcs
-                float d = direction.magnitude;
-                float F = (PhysicsConfig.G * bodyA.Mass * bodyB.Mass) / (d * d);
-                Vector3 gravityForce = (direction.normalized * F);
-
-                bodyA.AddForce(gravityForce * Time.deltaTime, PhysicsBody.ForceType.Impulse);
-                bodyB.AddForce(-gravityForce * F * Time.deltaTime, PhysicsBody.ForceType.Impulse);
+                body.AddForce(body.Acceleration, PhysicsBody.ForceType.Impulse);
+                body.AddForce(Gravity, PhysicsBody.ForceType.Impulse);
             }
         }
-    }
 
-    void UpdatePositions()
-	{
-        foreach (PhysicsBody body in physicsBodies)
+        void UpdateCollisions()
         {
-            if (body)
+            for (int i = 0; i < physicsColliders.Count - 1; i++)
             {
-                body.Move(body.LinearVelocity * Time.deltaTime);
+                PhysicsCollider colliderA = physicsColliders[i];
+
+                for (int j = i + 1; j < physicsColliders.Count; j++)
+                {
+                    PhysicsCollider colliderB = physicsColliders[j];
+
+                    // skip if both are static...
+                }
             }
         }
-    }
 
-    void BroadPhase()
-	{
+        void HandleGravity()
+        {
+            for (int i = 0; i < physicsBodies.Count - 1; i++)
+            {
+                PhysicsBody bodyA = physicsBodies[i];
 
-	}
+                for (int j = i + 1; j < physicsBodies.Count; j++)
+                {
+                    PhysicsBody bodyB = physicsBodies[j];
 
-    void Initialize()
-	{
-        physicsBodies.AddRange(GameObject.FindObjectsOfType<PhysicsBody>());
-        physicsColliders.AddRange(GameObject.FindObjectsOfType<PhysicsCollider>());
-        initialized = true;
-	}
+                    Vector3 direction = (bodyB.transform.position - bodyA.transform.position);
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        Initialize();
+                    // Physics Calcs
+                    float d = direction.magnitude;
+                    float F = (PhysicsConfig.G * bodyA.Mass * bodyB.Mass) / (d * d);
+                    Vector3 gravityForce = (direction.normalized * F);
 
-        if (simulationType == SimulationType.BROAD_PHASE)
-		{
-            BroadPhase();
-		}
-    }
+                    bodyA.AddForce(gravityForce * Time.deltaTime, PhysicsBody.ForceType.Impulse);
+                    bodyB.AddForce(-gravityForce * F * Time.deltaTime, PhysicsBody.ForceType.Impulse);
+                }
+            }
+        }
 
-    // Update is called once per frame
-    void Update()
-    {
-        if (initialized)
-		{
-            UpdateVelocity();
-            HandleGravity();
-            UpdatePositions();
-            UpdateCollisions();
-		}
+        void UpdatePositions()
+        {
+            foreach (PhysicsBody body in physicsBodies)
+            {
+                if (body)
+                {
+                    body.Move(body.LinearVelocity * Time.deltaTime);
+                }
+            }
+        }
+
+        void BroadPhase()
+        {
+
+        }
+
+        void Initialize()
+        {
+            physicsBodies.AddRange(GameObject.FindObjectsOfType<PhysicsBody>());
+            physicsColliders.AddRange(GameObject.FindObjectsOfType<PhysicsCollider>());
+            initialized = true;
+        }
+
+        // Start is called before the first frame update
+        void Start()
+        {
+            Initialize();
+
+            if (simulationType == SimulationType.BROAD_PHASE)
+            {
+                BroadPhase();
+            }
+        }
+
+        // Update is called once per frame
+        void Update()
+        {
+            if (initialized)
+            {
+                UpdateVelocity();
+                HandleGravity();
+                UpdatePositions();
+                UpdateCollisions();
+            }
+        }
     }
 }
+
