@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using PhysicsEngine.Engine;
-using PhysicsEngine.Colliders;
+using PhysicsEngine.PhysicsColliders;
 using MathU.Geometry;
 using MathU;
 using UnityEditor;
@@ -78,7 +78,7 @@ namespace PhysicsEngine.PhysicsBodies
 
             if (this.GetComponent<PhysicsCollider>() != null)
             {
-                this.GetComponent<PhysicsCollider>().requiresUpdate = HasMoved();
+                this.GetComponent<PhysicsCollider>().collisionGeometry.requiresUpdate = HasMoved();
             }
 
             lastPosition = this.transform.position;

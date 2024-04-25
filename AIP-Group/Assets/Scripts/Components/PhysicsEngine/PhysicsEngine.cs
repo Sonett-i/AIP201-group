@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using PhysicsEngine.Colliders;
+using PhysicsEngine.PhysicsColliders;
 using PhysicsEngine.PhysicsBodies;
 
 namespace PhysicsEngine.Engine
@@ -46,7 +46,10 @@ namespace PhysicsEngine.Engine
                     if (colliderA.GetComponent<PhysicsBody>().bodyType == PhysicsBody.BodyType.Static && colliderB.GetComponent<PhysicsBody>().bodyType == PhysicsBody.BodyType.Static)
                         continue;
 
-                    PhysicsCollisions.HandleCollision(colliderA, colliderB);
+                    if (colliderA && colliderB)
+					{
+                        PhysicsCollisions.HandleCollision(colliderA, colliderB);
+                    }
                 }
             }
         }
@@ -114,7 +117,7 @@ namespace PhysicsEngine.Engine
             if (initialized)
             {
                 UpdateVelocity();
-                HandleGravity();
+                //HandleGravity();
                 UpdatePositions();
                 UpdateCollisions();
             }

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace PhysicsEngine.Colliders
+namespace PhysicsEngine.PhysicsColliders
 {
     public class CircleCollider : ColliderGeometry
 	{
@@ -13,6 +13,11 @@ namespace PhysicsEngine.Colliders
 			base.Shape = MathU.Geometry.Geometry.Shapes.Circle;
 
 			this.Radius = radius;
+		}
+
+		public void UpdateCircle(float radius)
+		{
+			Radius = radius;
 		}
 	}
 }

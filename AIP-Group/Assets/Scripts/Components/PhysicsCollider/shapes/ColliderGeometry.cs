@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using MathU.Geometry;
 
-namespace PhysicsEngine.Colliders
+namespace PhysicsEngine.PhysicsColliders
 {
 	public class ColliderGeometry
 	{
 		public Vector3 Position;
 		public Geometry.Shapes Shape;
-		static Quaternion defaultQuaternion = Quaternion.identity;
+		public bool requiresUpdate = true;
 
 		public ColliderGeometry(Vector3 position)
 		{
@@ -30,7 +30,15 @@ namespace PhysicsEngine.Colliders
 				OBBCollider OBB = (OBBCollider)this;
 				OBB.UpdateOBB(position, rotation, scale);
 			}
-				//update AABB
+			else if (this is CircleCollider)
+			{
+				CircleCollider Circle = (CircleCollider)this;
+				Circle.UpdateCircle(scale.x / 2f);
+			}
+
+			//update AABB
+
+			requiresUpdate = false;
 		}
 	}
 }

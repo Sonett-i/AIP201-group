@@ -10,7 +10,7 @@ using MathU.Geometry;
  *      Individual collider component that stores collider geometry information. Does not handle collision logic.
  */
 
-namespace PhysicsEngine.Colliders
+namespace PhysicsEngine.PhysicsColliders
 {
     public class PhysicsCollider : MonoBehaviour
     {
@@ -25,7 +25,7 @@ namespace PhysicsEngine.Colliders
 
         // Geometry
         public ColliderGeometry collisionGeometry;
-        public bool requiresUpdate = true;
+        public bool requiresUpdate = false;
 
         // Start is called before the first frame update
         void Start()
@@ -39,7 +39,7 @@ namespace PhysicsEngine.Colliders
         // Update is called once per frame
         void Update()
         {
-
+            
         }
 
         // Set Collider Info From Physics
@@ -88,7 +88,7 @@ namespace PhysicsEngine.Colliders
 
         private void OnDrawGizmos()
         {
-            PhysicsDebug.DrawShape(this.colliderShape, this.transform.position, this.transform.rotation, this.transform.localScale);
+            PhysicsDebug.DrawShape(this.colliderShape, this.transform.position, this.transform.rotation, this.transform.localScale, Color.green);
         }
     }
 }

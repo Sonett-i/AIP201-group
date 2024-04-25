@@ -21,19 +21,19 @@ public class PhysicsDebug : MonoBehaviour
 
     // Drawing
 
-    public static void DrawShape(Geometry.Shapes shape, Vector3 position, Quaternion rotation, Vector3 scale)
+    public static void DrawShape(Geometry.Shapes shape, Vector3 position, Quaternion rotation, Vector3 scale, Color colour)
 	{
         if (shape == Geometry.Shapes.Point)
 		{
-            GizmoTools.DrawCircleGizmo(position, rotation, 0.1f, Color.green);
+            GizmoTools.DrawCircleGizmo(position, rotation, 0.1f, colour);
         }
         else if (shape == Geometry.Shapes.Circle)
 		{
-            GizmoTools.DrawCircleGizmo(position, rotation, scale.x / 2f, Color.green);
+            GizmoTools.DrawCircleGizmo(position, rotation, scale.x / 2f, colour);
 		}
         else if (shape == Geometry.Shapes.AABB)
 		{
-            GizmoTools.DrawRectangleGizmo(position, scale, rotation, Color.green);
+            GizmoTools.DrawRectangleGizmo(position, scale, rotation, colour);
 		}
 	}
 

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace PhysicsEngine.Colliders
+namespace PhysicsEngine.PhysicsColliders
 {
     public class PolygonCollider : ColliderGeometry
     {
