@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using MathU.Geometry;
 
 public class PhysicsDebug : MonoBehaviour
 {
@@ -17,52 +18,27 @@ public class PhysicsDebug : MonoBehaviour
         max
     }
 
-    [SerializeField] float lineLength = 1f;
-    static float _lineLength;
 
+    // Drawing
 
-    public static void DrawPoint(Vector3 point, float radius, Color col)
-    {
-        Vector2[] points = new Vector2[2];
-        points[0] = point;
-        points[1] = (point - point) * radius;
-
-        Debug.DrawLine(points[0], points[1], col);
-
-    }
-
-    float GetLineLength()
-    {
-        return lineLength;
-    }
-
-    public static Vector3 AxisIntersection(Vector3 vector, Axis axis, MinMax minmax)
-    {
-        Vector3 result = vector;
-
-        float offset = (minmax == MinMax.max) ? _lineLength : -_lineLength;
-
-        if (axis == Axis.x)
-        {
-            result.x += offset;
+    public static void DrawShape(Geometry.Shapes shape, Vector3 position, Quaternion rotation, Vector3 scale)
+	{
+        if (shape == Geometry.Shapes.Point)
+		{
+            GizmoTools.DrawCircleGizmo(position, rotation, 0.1f, Color.green);
         }
+        else if (shape == Geometry.Shapes.Circle)
+		{
+            GizmoTools.DrawCircleGizmo(position, rotation, scale.x / 2f, Color.green);
+		}
+        else if (shape == Geometry.Shapes.AABB)
+		{
+            GizmoTools.DrawRectangleGizmo(position, scale, rotation, Color.green);
+		}
+	}
 
-        if (axis == Axis.y)
-        {
-            result.y += offset;
-        }
-
-        if (axis == Axis.z)
-        {
-            result.z += offset;
-        }
-
-        return result;
-    }
-
-
-    private void Update()
-    {
-        _lineLength = lineLength;
-    }
+	public static void DrawLine(Vector3 pointA, Vector3 pointB, Color colour)
+	{
+        Debug.DrawLine(pointB, pointA, colour);
+	}
 }

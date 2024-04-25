@@ -4,19 +4,21 @@ using UnityEngine;
 
 namespace PhysicsEngine.Colliders
 {
+    // Collision class that stores collision information.
     public class Collision
 	{
+        public Vector3 normal; // the direction to push the colliding objects away.
+        public float intersection; // the area of intersection.
 
+        public Collision(Vector3 normal, float intersection)
+		{
+			this.normal = normal;
+			this.intersection = intersection;
+		}
 	}
+
     public class PhysicsCollisions : MonoBehaviour
     {
-        public enum ColliderShape
-        {
-            Circle,
-            AABB,
-            OBB,
-            Polygon
-        }
         public enum CollisionType
         {
             POINT_POINT,
@@ -48,6 +50,16 @@ namespace PhysicsEngine.Colliders
         {
             return null;
         }
+
+        public static Collision HandleCollision(PhysicsCollider colliderA, PhysicsCollider colliderB)
+		{
+            Collision collision = null;
+
+            ColliderGeometry A = colliderA.collisionGeometry;
+            ColliderGeometry B = colliderB.collisionGeometry;
+
+            return collision;
+		}
         // Start is called before the first frame update
         void Start()
         {

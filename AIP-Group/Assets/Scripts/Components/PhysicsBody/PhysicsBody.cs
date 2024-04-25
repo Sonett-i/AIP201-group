@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using PhysicsEngine.Engine;
 using PhysicsEngine.Colliders;
+using MathU.Geometry;
+using MathU;
+using UnityEditor;
+
 
 namespace PhysicsEngine.PhysicsBodies
 {
@@ -21,17 +25,11 @@ namespace PhysicsEngine.PhysicsBodies
             Static,
         }
 
-        public enum Geometry
-        {
-            Circle,
-            Rectangle,
-            Polygon,
-            Cube,
-            Sphere,
-        }
+        PhysicsCollider colliderComponent;
 
         public BodyType bodyType = BodyType.Dynamic;
-        public Geometry geometry = Geometry.Circle;
+        public Geometry.Shapes geometry = Geometry.Shapes.Circle;
+
 
         // Physics Config
         public Vector3 LinearVelocity = Vector3.zero; // v
@@ -50,6 +48,11 @@ namespace PhysicsEngine.PhysicsBodies
         public float Width;
         public float Height;
 
+
+        // Debug
+        Vector3 lastPosition;
+        Vector3 lastScale;
+        Quaternion lastRotation;
         public void AddForce(Vector3 force, ForceType forceType)
         {
             if (this.bodyType != BodyType.Static)
@@ -88,30 +91,71 @@ namespace PhysicsEngine.PhysicsBodies
 
         }
 
+        void GetComponents()
+		{
+            colliderComponent = this.GetComponent<PhysicsCollider>();
+
+            if (colliderComponent == null)
+			{
+                Debug.LogWarning(this.gameObject.name + " is missing a collider component");
+			}
+		}
+
+        public void UpdateGeometry(Geometry.Shapes shape)
+		{
+            this.geometry = shape;
+		}
+
         void UpdatePhysicalProperties()
         {
-            if (this.geometry == Geometry.Circle || this.geometry == Geometry.Sphere)
+            if (this.geometry == Geometry.Shapes.Circle)
             {
                 Radius = this.transform.localScale.x / 2f;
                 Area = Mathf.PI * (Radius * Radius); // 2?r^2
 
+                Width = 0;
+                Height = 0;
             }
             else
             {
                 Width = this.transform.localScale.x;
                 Height = this.transform.localScale.y;
                 Area = Width * Height;
+
+                Radius = 0;
             }
 
 
             InverseMass = (bodyType == BodyType.Static) ? 0 : 1f / Mass;
-            Restitution = MathU.Clamp(Restitution, 0f, 1f);
+            Restitution = Piecewise.Clamp(Restitution, 0f, 1f);
             Mass = Area * Density;
+
+            lastPosition = this.transform.position;
+            lastRotation = this.transform.rotation;
+            lastScale = this.transform.localScale;
         }
+
+        void UpdateCollider()
+		{
+            if (this.GetComponent<PhysicsCollider>())
+			{
+                this.GetComponent<PhysicsCollider>().SetFromPhysicsBody();
+			}
+		}
 
         private void OnValidate()
         {
             UpdatePhysicalProperties();
+            UpdateCollider();
         }
-    }
+
+		private void OnDrawGizmos()
+		{
+            if (this.transform.position != lastPosition || this.transform.rotation != lastRotation || this.transform.localScale != lastScale)
+			{
+                UpdatePhysicalProperties();
+            }
+            
+        }
+	}
 }

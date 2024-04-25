@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using PhysicsEngine.PhysicsBodies;
+using MathU.Geometry;
 
 
 /*  File: Physics Collider
@@ -13,19 +14,26 @@ namespace PhysicsEngine.Colliders
 {
     public class PhysicsCollider : MonoBehaviour
     {
-        public PhysicsCollisions.ColliderShape colliderShape = PhysicsCollisions.ColliderShape.Circle;
+		[Header("Collider Config")]
+		[Tooltip("Update this from PhysicsBody component if object has a PhysicsBody component.")]
+        public Geometry.Shapes colliderShape = Geometry.Shapes.Circle;
+        public bool isTrigger = false;
 
+		[Header("Debugging")]
         // Objects this collider is colliding with.
         public List<PhysicsCollider> collidingObjects = new List<PhysicsCollider>();
 
-        ColliderGeometry collisionGeometry;
+        // Geometry
+        public ColliderGeometry collisionGeometry;
         public bool requiresUpdate = true;
-        public PhysicsCollider physicsCollider;
 
         // Start is called before the first frame update
         void Start()
         {
-
+            if (this.gameObject.GetComponent<PhysicsBody>())
+            {
+                SetFromPhysicsBody();
+            }
         }
 
         // Update is called once per frame
@@ -34,29 +42,34 @@ namespace PhysicsEngine.Colliders
 
         }
 
-        void SetFromPhysicsBody()
+        // Set Collider Info From Physics
+        public void SetFromPhysicsBody()
 		{
             PhysicsBody body = (PhysicsBody)this.gameObject.GetComponent<PhysicsBody>();
-
-            if (body.geometry == PhysicsBody.Geometry.Circle)
+            if (body.geometry == Geometry.Shapes.Point)
+			{
+                this.colliderShape = Geometry.Shapes.Point;
+                this.collisionGeometry = new PointCollider(this.transform.position);
+			}
+            if (body.geometry == Geometry.Shapes.Circle)
             {
-                this.colliderShape = PhysicsCollisions.ColliderShape.Circle;
+                this.colliderShape = Geometry.Shapes.Circle;
                 this.collisionGeometry = new CircleCollider(this.transform.position, this.transform.localScale.x / 2f);
             }
-            else if (body.geometry == PhysicsBody.Geometry.Rectangle)
+            else if (body.geometry == Geometry.Shapes.AABB)
+			{
+                this.colliderShape = Geometry.Shapes.AABB;
+                this.collisionGeometry = new AABBCollider(this.transform.position, this.transform.localScale);
+			}
+            else if (body.geometry == Geometry.Shapes.OBB)
             {
-                this.colliderShape = PhysicsCollisions.ColliderShape.OBB;
+                this.colliderShape = Geometry.Shapes.OBB;
                 this.collisionGeometry = new OBBCollider(this.transform.position, this.transform.localScale);
             }
-            else if (body.geometry == PhysicsBody.Geometry.Polygon)
+            else if (body.geometry == Geometry.Shapes.Polygon)
             {
-                this.colliderShape = PhysicsCollisions.ColliderShape.Polygon;
+                this.colliderShape = Geometry.Shapes.Polygon;
             }
-        }
-
-        void GetColliderShape()
-		{
-
         }
 
 		private void OnValidate()
@@ -66,12 +79,16 @@ namespace PhysicsEngine.Colliders
                 SetFromPhysicsBody();
 			}
 
+            if (this.gameObject.GetComponent<PhysicsBody>().geometry != this.colliderShape)
+			{
+                this.gameObject.GetComponent<PhysicsBody>().UpdateGeometry(this.colliderShape);
+            }
             //GetColliderShape();
 		}
 
         private void OnDrawGizmos()
         {
-
+            PhysicsDebug.DrawShape(this.colliderShape, this.transform.position, this.transform.rotation, this.transform.localScale);
         }
     }
 }

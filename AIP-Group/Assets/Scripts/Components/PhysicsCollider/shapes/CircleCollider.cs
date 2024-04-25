@@ -6,12 +6,10 @@ namespace PhysicsEngine.Colliders
 {
     public class CircleCollider : ColliderGeometry
 	{
-        public Vector2 position;
         public float radius;
 
-        public CircleCollider(Vector2 position, float radius)
+        public CircleCollider(Vector3 position, float radius) : base (position)
 		{
-			this.position = position;
 			this.radius = radius;
 		}
 	}
