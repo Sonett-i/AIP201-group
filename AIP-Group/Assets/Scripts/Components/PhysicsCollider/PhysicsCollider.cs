@@ -27,6 +27,10 @@ namespace PhysicsEngine.PhysicsColliders
         public ColliderGeometry collisionGeometry;
         public bool requiresUpdate = false;
 
+        public void PhysicsTrigger(PhysicsCollider other)
+		{
+            
+		}
         // Start is called before the first frame update
         void Start()
         {

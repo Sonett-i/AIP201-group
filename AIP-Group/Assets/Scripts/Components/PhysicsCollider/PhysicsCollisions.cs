@@ -214,6 +214,7 @@ namespace PhysicsEngine.PhysicsColliders
             if (Colliding == false)
                 return;
 
+
             colliderA.GetComponent<PhysicsBody>().Move(-normal * (intersection / 2f));
             colliderB.GetComponent<PhysicsBody>().Move(normal * (intersection / 2f));
         }
