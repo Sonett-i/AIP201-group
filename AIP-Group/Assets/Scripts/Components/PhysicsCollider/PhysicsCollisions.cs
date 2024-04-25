@@ -40,36 +40,44 @@ namespace PhysicsEngine.Colliders
             [CollisionType.AABB_AABB] = (colliderA, colliderB) => Placeholder(colliderA, colliderB),
         };
 
-
-        public static Collision PointPointCollision(PhysicsCollider a, PhysicsCollider b)
+		#region Collisions
+		public static Collision PointPointCollision(PhysicsCollider a, PhysicsCollider b)
 		{
             return null;
 		}
 
+        // https://research.ncl.ac.uk/game/mastersdegree/gametechnologies/previousinformation/physics4collisiondetection/2017%20Tutorial%204%20-%20Collision%20Detection.pdf
+        public static Collision OBBCollision(PhysicsCollider a, PhysicsCollider b)
+		{
+            return null;
+		}
+        // placeholder delegate, remove prior to shipping lol
         public static Collision Placeholder(PhysicsCollider a, PhysicsCollider b)
         {
             return null;
         }
 
-        public static Collision HandleCollision(PhysicsCollider colliderA, PhysicsCollider colliderB)
+		#endregion
+
+		#region Abstraction
+		public static Collision HandleCollision(PhysicsCollider colliderA, PhysicsCollider colliderB)
 		{
             Collision collision = null;
 
             ColliderGeometry A = colliderA.collisionGeometry;
             ColliderGeometry B = colliderB.collisionGeometry;
 
+            // We only want to update geometry info for collision when required.
+            if (colliderA.requiresUpdate)
+                A.Update(colliderA.transform.position, colliderA.transform.localScale, colliderA.transform.rotation);
+
+            if (colliderB.requiresUpdate)
+                B.Update(colliderB.transform.position, colliderA.transform.localScale,colliderA.transform.rotation);
+
+            Debug.Log($"{A.Shape} {B.Shape}");
+
             return collision;
 		}
-        // Start is called before the first frame update
-        void Start()
-        {
-
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-
-        }
-    }
+		#endregion
+	}
 }

@@ -49,7 +49,7 @@ namespace PhysicsEngine.PhysicsBodies
         public float Height;
 
 
-        // Debug
+        // Cache Positions
         Vector3 lastPosition;
         Vector3 lastScale;
         Quaternion lastRotation;
@@ -66,23 +66,34 @@ namespace PhysicsEngine.PhysicsBodies
         {
             if (this.bodyType != BodyType.Static)
             {
-                this.transform.position += force;
-                if (this.GetComponent<PhysicsCollider>() != null)
-                {
+                Vector3 newPosition = this.transform.position + force;
 
-                }
+                MoveTo(newPosition);
             }
         }
 
         public void MoveTo(Vector3 position)
         {
             this.transform.position = position;
+
+            if (this.GetComponent<PhysicsCollider>() != null)
+            {
+                this.GetComponent<PhysicsCollider>().requiresUpdate = HasMoved();
+            }
+
+            lastPosition = this.transform.position;
+            lastRotation = this.transform.localRotation;
+            lastScale = this.transform.localScale;
         }
 
+        bool HasMoved()
+		{
+            return (this.transform.position != lastPosition || this.transform.rotation != lastRotation || this.transform.localScale != lastScale);
+		}
         // Start is called before the first frame update
         void Start()
         {
-
+            GetComponents();
         }
 
         // Update is called once per frame
@@ -145,17 +156,17 @@ namespace PhysicsEngine.PhysicsBodies
 
         private void OnValidate()
         {
+            GetComponents();
             UpdatePhysicalProperties();
             UpdateCollider();
         }
 
 		private void OnDrawGizmos()
 		{
-            if (this.transform.position != lastPosition || this.transform.rotation != lastRotation || this.transform.localScale != lastScale)
+            if (HasMoved())
 			{
                 UpdatePhysicalProperties();
             }
-            
         }
 	}
 }

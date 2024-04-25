@@ -6,7 +6,11 @@ namespace PhysicsEngine.Colliders
 {
     public class PointCollider : ColliderGeometry
     {
-        public PointCollider(Vector3 position) : base(position) { }
+        public PointCollider(Vector3 position) : base(position) 
+        {
+            base.Shape = MathU.Geometry.Geometry.Shapes.Point;
+        }
+
     }
 }
 

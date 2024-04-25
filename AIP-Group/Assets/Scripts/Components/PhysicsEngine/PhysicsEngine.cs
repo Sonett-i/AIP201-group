@@ -43,6 +43,10 @@ namespace PhysicsEngine.Engine
                     PhysicsCollider colliderB = physicsColliders[j];
 
                     // skip if both are static...
+                    if (colliderA.GetComponent<PhysicsBody>().bodyType == PhysicsBody.BodyType.Static && colliderB.GetComponent<PhysicsBody>().bodyType == PhysicsBody.BodyType.Static)
+                        continue;
+
+                    PhysicsCollisions.HandleCollision(colliderA, colliderB);
                 }
             }
         }
