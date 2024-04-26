@@ -47,6 +47,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bodyType: 0
+  geometry: 3
   LinearVelocity: {x: 0, y: 0, z: 0}
   Acceleration: {x: 0, y: 0, z: 0}
   Rotation: 0
@@ -71,6 +72,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd23b790d3d33334f8a05cab925a52df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  colliderShape: 3
+  isTrigger: 0
+  collidingObjects: []
+  requiresUpdate: 0
 --- !u!212 &9177512092216495363
 SpriteRenderer:
   m_ObjectHideFlags: 0

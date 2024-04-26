@@ -8,12 +8,31 @@ namespace PhysicsEngine.PhysicsColliders
 	public class ColliderGeometry
 	{
 		public Vector3 Position;
+		public Vector3 Scale;
+		public Vector3 Rotation;
+
 		public Geometry.Shapes Shape;
 		public bool requiresUpdate = true;
 
 		public ColliderGeometry(Vector3 position)
 		{
 			this.Position = position;
+			this.Scale = Vector3.zero;
+			this.Rotation = Vector3.zero;
+		}
+
+		public ColliderGeometry(Vector3 position, Vector3 scale)
+		{
+			this.Position = position;
+			this.Scale = scale;
+			this.Rotation = Vector3.zero;
+		}
+
+		public ColliderGeometry(Vector3 position, params Vector3[] args)
+		{
+			this.Position = position;
+			this.Scale = args[0];
+			this.Rotation = args[1];
 		}
 
 		public void Update(Vector2 position, Vector2 scale = default, Quaternion rotation = default)

@@ -23,7 +23,9 @@ public static class GizmoTools
 		Gizmos.color = colour;
 
 		Matrix4x4 oldMatrix = Gizmos.matrix;
-		Gizmos.matrix = Matrix4x4.TRS(position, rotation, scale);
+
+		Gizmos.matrix = Matrix4x4.TRS(position, rotation, new Vector3(1, 1, 0f));
 		Gizmos.DrawWireCube(Vector3.zero, scale);
+		Gizmos.matrix = oldMatrix;
 	}
 }

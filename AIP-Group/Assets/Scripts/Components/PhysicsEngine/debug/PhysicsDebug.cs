@@ -31,7 +31,7 @@ public class PhysicsDebug : MonoBehaviour
 		{
             GizmoTools.DrawCircleGizmo(position, rotation, scale.x / 2f, colour);
 		}
-        else if (shape == Geometry.Shapes.AABB)
+        else if (shape == Geometry.Shapes.AABB || shape == Geometry.Shapes.OBB)
 		{
             GizmoTools.DrawRectangleGizmo(position, scale, rotation, colour);
 		}

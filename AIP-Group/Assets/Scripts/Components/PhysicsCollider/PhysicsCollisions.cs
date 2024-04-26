@@ -41,6 +41,7 @@ namespace PhysicsEngine.PhysicsColliders
             [CollisionType.POINT_AABB] = (colliderA, colliderB) => Placeholder(colliderA, colliderB),
             [CollisionType.CIRCLE_CIRCLE] = (colliderA, colliderB) => CircleCircleCollision(colliderA, colliderB),
             [CollisionType.CIRCLE_AABB] = (colliderA, colliderB) => Placeholder(colliderA, colliderB),
+            [CollisionType.OBB_CIRCLE] = (colliderA, colliderB) => Placeholder(colliderA, colliderB),
             [CollisionType.AABB_AABB] = (colliderA, colliderB) => Placeholder(colliderA, colliderB),
             [CollisionType.INVALID] = (colliderA, colliderB) => Placeholder(colliderA, colliderB),
         };
@@ -161,7 +162,7 @@ namespace PhysicsEngine.PhysicsColliders
         // placeholder delegate, remove prior to shipping lol
         public static Collision Placeholder(PhysicsCollider a, PhysicsCollider b)
         {
-            Debug.Log("PLACEHOLDER");
+            //Debug.Log("PLACEHOLDER");
             Collision collision = new Collision() { Colliding = false };
             return collision;
         }

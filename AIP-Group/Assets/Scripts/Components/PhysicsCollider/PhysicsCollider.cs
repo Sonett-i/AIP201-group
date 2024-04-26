@@ -68,7 +68,7 @@ namespace PhysicsEngine.PhysicsColliders
             else if (body.geometry == Geometry.Shapes.OBB)
             {
                 this.colliderShape = Geometry.Shapes.OBB;
-                this.collisionGeometry = new OBBCollider(this.transform.position, this.transform.localScale);
+                this.collisionGeometry = new OBBCollider(this.transform.position, this.transform.localScale, this.transform.rotation.eulerAngles);
             }
             else if (body.geometry == Geometry.Shapes.Polygon)
             {
