@@ -10,6 +10,7 @@ namespace PhysicsEngine.PhysicsColliders
 		public Vector3 Position;
 		public Vector3 Scale;
 		public Vector3 Rotation;
+		public Quaternion rotation;
 
 		public Geometry.Shapes Shape;
 		public bool requiresUpdate = true;
@@ -47,7 +48,7 @@ namespace PhysicsEngine.PhysicsColliders
 			else if (this is OBBCollider)
 			{
 				OBBCollider OBB = (OBBCollider)this;
-				OBB.UpdateOBB(position, rotation, scale);
+				OBB.UpdateOBB(position, rotation.eulerAngles, scale);
 			}
 			else if (this is CircleCollider)
 			{

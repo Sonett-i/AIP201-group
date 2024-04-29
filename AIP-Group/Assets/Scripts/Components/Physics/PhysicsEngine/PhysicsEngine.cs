@@ -48,7 +48,7 @@ namespace PhysicsEngine.Engine
 
                     if (colliderA && colliderB)
 					{
-                        PhysicsCollisions.HandleCollision(colliderA, colliderB);
+                        CollisionHandler.HandleCollision(colliderA, colliderB);
                     }
                 }
             }

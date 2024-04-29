@@ -4,7 +4,6 @@ using UnityEngine;
 using PhysicsEngine.PhysicsBodies;
 using MathU.Geometry;
 
-
 /*  File: Physics Collider
  * 
  *      Individual collider component that stores collider geometry information. Does not handle collision logic.
@@ -43,7 +42,10 @@ namespace PhysicsEngine.PhysicsColliders
         // Update is called once per frame
         void Update()
         {
-            
+            if (this.colliderShape == Geometry.Shapes.OBB)
+			{
+                this.collisionGeometry.Update(this.transform.position, this.transform.localScale, this.transform.rotation);
+			}
         }
 
         // Set Collider Info From Physics

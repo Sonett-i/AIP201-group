@@ -7,9 +7,7 @@ using PhysicsEngine.PhysicsBodies;
 
 namespace PhysicsEngine.PhysicsColliders
 {
-
-
-    public class PhysicsCollisions : MonoBehaviour
+    public class CollisionHandler : MonoBehaviour
     {
         public enum CollisionType
         {
@@ -43,6 +41,7 @@ namespace PhysicsEngine.PhysicsColliders
             [CollisionType.CIRCLE_AABB] = (colliderA, colliderB) => Placeholder(colliderA, colliderB),
             [CollisionType.OBB_CIRCLE] = (colliderA, colliderB) => Placeholder(colliderA, colliderB),
             [CollisionType.AABB_AABB] = (colliderA, colliderB) => Placeholder(colliderA, colliderB),
+			[CollisionType.OBB_OBB] = (colliderA, colliderB) => OBBCollision(colliderA, colliderB),
             [CollisionType.INVALID] = (colliderA, colliderB) => Placeholder(colliderA, colliderB),
         };
 
@@ -155,8 +154,14 @@ namespace PhysicsEngine.PhysicsColliders
         // https://research.ncl.ac.uk/game/mastersdegree/gametechnologies/previousinformation/physics4collisiondetection/2017%20Tutorial%204%20-%20Collision%20Detection.pdf
         public static Collision OBBCollision(PhysicsCollider a, PhysicsCollider b)
 		{
-            Debug.Log("OBBOBB");
+            //Debug.Log("OBBOBB");
             Collision collision = new Collision() { Colliding = false };
+
+            OBBCollider aCollider = a.collisionGeometry as OBBCollider;
+            OBBCollider bCollider = b.collisionGeometry as OBBCollider;
+
+            collision.Colliding = SAT.IntersectPolygons(aCollider.TransformedVertices, bCollider.TransformedVertices);
+
             return collision;
 		}
         // placeholder delegate, remove prior to shipping lol
@@ -172,7 +177,9 @@ namespace PhysicsEngine.PhysicsColliders
 		#region Abstraction
 		public static Collision HandleCollision(PhysicsCollider colliderA, PhysicsCollider colliderB)
 		{
-            Collision collision = new Collision() { Colliding = false }; 
+            Collision collision = new Collision() { Colliding = false };
+
+            Color lineColour = PhysicsConfig.DefaultDebugColour;
 
             if (colliderA.collisionGeometry != null && colliderB.collisionGeometry != null)
 			{
@@ -184,7 +191,7 @@ namespace PhysicsEngine.PhysicsColliders
 
                 collision = collisionTypes[GetCollisionType(colliderA.collisionGeometry.Shape, colliderB.collisionGeometry.Shape)].Invoke(colliderA, colliderB);
 
-                Debug.DrawLine(colliderB.transform.position, colliderA.transform.position, Color.cyan);
+                
 
                 if (collision.Colliding)
                 {
@@ -192,7 +199,11 @@ namespace PhysicsEngine.PhysicsColliders
                     collision.colliderB = colliderB;
 
                     collision.Resolve();
+                    //Debug.Log("COLLIDING " + GetCollisionType(colliderA.collisionGeometry.Shape, colliderB.collisionGeometry.Shape));
+                    lineColour = PhysicsConfig.CollidingColour;
                 }
+
+                Debug.DrawLine(colliderB.transform.position, colliderA.transform.position, lineColour);
             }
            
             return collision;

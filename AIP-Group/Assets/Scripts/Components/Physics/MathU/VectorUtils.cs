@@ -28,7 +28,6 @@ namespace MathU.Geometry
 			this.Sin = Mathf.Sin(angle);
 			this.Cos = Mathf.Cos(angle);
 		}
-
 	}
 	public static class VectorUtils
 	{
@@ -41,9 +40,18 @@ namespace MathU.Geometry
 
 		public static Vector3 Transform(Vector3 v, Transform transform)
 		{
+			float rx = transform.Cos * v.x - transform.Sin * v.y;
+			float ry = transform.Sin * v.x + transform.Cos * v.y;
+
+			float tx = rx + transform.Position.x;
+			float ty = ry + transform.Position.y;
+
+			return new Vector3(tx, ty);
+			/*
 			return new Vector3(
 				transform.Cos * v.x - transform.Sin * v.y + transform.Position.x,
 				transform.Sin * v.x + transform.Cos * v.y + transform.Position.y);
+			*/
 		}
 	}
 }
