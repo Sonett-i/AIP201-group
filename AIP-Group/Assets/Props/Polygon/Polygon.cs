@@ -10,6 +10,15 @@ public class Polygon : MonoBehaviour
     // Config
     [SerializeField]
     List<Vector2> vertices = new List<Vector2>();
+
+
+    void DrawLines()
+	{
+        for (int i = 0; i < vertices.Count; i++)
+		{
+
+		}
+	}
     // Start is called before the first frame update
     void Start()
     {
@@ -21,4 +30,9 @@ public class Polygon : MonoBehaviour
     {
         
     }
+
+	private void OnValidate()
+	{
+		
+	}
 }
