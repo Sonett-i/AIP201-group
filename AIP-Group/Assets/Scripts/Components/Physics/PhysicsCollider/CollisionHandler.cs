@@ -175,13 +175,8 @@ namespace PhysicsEngine.PhysicsColliders
             // Debug.Log("PolygonCol");
             Collision collision = new Collision() { Colliding = false };
 
-            PolygonCollider aCollider = a.collisionGeometry as PolygonCollider;
-            PolygonCollider bCollider = b.collisionGeometry as PolygonCollider;
+            collision.Colliding = SAT.IntersectPolygons(a.GetComponent<Polygon>().transformedVertices, b.GetComponent<Polygon>().transformedVertices);
 
-            if (aCollider.TransformedVertices != null && bCollider.TransformedVertices != null)
-			{
-                collision.Colliding = SAT.IntersectPolygons(aCollider.TransformedVertices, bCollider.TransformedVertices);
-            }
 
             return collision;
         }

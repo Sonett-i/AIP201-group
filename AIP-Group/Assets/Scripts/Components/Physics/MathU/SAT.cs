@@ -19,7 +19,7 @@ namespace MathU.Geometry
 
 		public static bool IntersectPolygons(Vector2[] verticesA, Vector2[] verticesB)
 		{
-			Debug.Log(verticesA.Length + " " + verticesB.Length);
+			//Debug.Log(verticesA.Length + " " + verticesB.Length);
 			for (int i = 0; i < 2; i++)
 			{
 				Vector2[] vertices = (i == 0) ? verticesA : verticesB;

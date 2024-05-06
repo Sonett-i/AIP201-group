@@ -34,13 +34,15 @@ public class Polygon : MonoBehaviour
     void DrawLines()
 	{
         TransformVertices();
-        lineRenderer.positionCount = vertices.Length;
+        lineRenderer.positionCount = vertices.Length + 1;
         
         for (int i = 0; i < vertices.Length; i++)
 		{
             lineRenderer.SetPosition(i, transformedVertices[i]);
 		}
-	}
+
+        lineRenderer.SetPosition(vertices.Length, transformedVertices[0]);
+    }
 
     //
     Vector2 Transform(float x, float y, float theta)
