@@ -55,10 +55,23 @@ namespace PhysicsEngine.PhysicsColliders
 				CircleCollider Circle = (CircleCollider)this;
 				Circle.UpdateCircle(scale.x / 2f);
 			}
-
+			else if (this is PolygonCollider)
+			{
+				PolygonCollider Polygon = (PolygonCollider)this;
+				Polygon.UpdatePolygon(position, rotation.eulerAngles, scale);
+			}
 			//update AABB
 
 			requiresUpdate = false;
+		}
+
+		public void UpdateGeometry(Vector2[] vertices)
+		{
+			if (this is PolygonCollider)
+			{
+				PolygonCollider polygon = (PolygonCollider)this;
+				polygon.UpdateVertices(vertices);
+			}
 		}
 	}
 }

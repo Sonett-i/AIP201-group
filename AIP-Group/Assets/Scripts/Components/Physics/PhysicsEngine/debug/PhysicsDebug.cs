@@ -39,6 +39,18 @@ public class PhysicsDebug : MonoBehaviour
 
 	public static void DrawLine(Vector3 pointA, Vector3 pointB, Color colour)
 	{
-        Debug.DrawLine(pointB, pointA, colour);
+        if (PhysicsConfig.debugMode)
+		{
+            Debug.DrawLine(pointB, pointA, colour);
+        }
+	}
+
+    public static void DrawPolygon(Vector2[] vertices, Color color)
+	{
+        for (int i = 0; i < vertices.Length; i++)
+		{
+            Debug.DrawLine(vertices[i], vertices[(i + 1) % vertices.Length], color);
+            //DrawLine(vertices[i], vertices[(i+1) % vertices.Length], color);
+		}
 	}
 }

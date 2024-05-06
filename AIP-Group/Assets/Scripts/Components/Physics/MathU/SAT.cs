@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using PhysicsEngine.PhysicsColliders;
 
 namespace MathU.Geometry
 {
@@ -18,20 +19,21 @@ namespace MathU.Geometry
 
 		public static bool IntersectPolygons(Vector2[] verticesA, Vector2[] verticesB)
 		{
+			Debug.Log(verticesA.Length + " " + verticesB.Length);
 			for (int i = 0; i < 2; i++)
 			{
 				Vector2[] vertices = (i == 0) ? verticesA : verticesB;
 
 				for (int j = 0; j < vertices.Length; j++)
 				{
-					Vector2 vA = verticesA[j]; // vertex A
-					Vector2 vB = verticesA[(j + 1) % verticesA.Length]; // vertex B
+					Vector2 vA = vertices[j]; // vertex A
+					Vector2 vB = vertices[(j + 1) % vertices.Length]; // vertex B
 
 					Vector2 edge = vB - vA;
 					Vector2 axis = new Vector2(-edge.y, edge.x);
 
-					ProjectVertices(verticesA, axis, out float minA, out float maxA);
-					ProjectVertices(verticesB, axis, out float minB, out float maxB);
+					SAT.ProjectVertices(verticesA, axis, out float minA, out float maxA);
+					SAT.ProjectVertices(verticesB, axis, out float minB, out float maxB);
 
 					if (minA >= maxB || minB >= maxA)
 					{
@@ -51,11 +53,17 @@ namespace MathU.Geometry
 			for (int i = 0; i < vertices.Length; i++)
 			{
 				Vector2 v = vertices[i];
-				Debug.DrawLine(v, axis, Color.magenta);
+				
 				float projection = Vector2.Dot(v, axis);
 
 				if (projection < min) { min = projection; }
 				if (projection > max) { max = projection; }
+
+				if (PhysicsConfig.debugMode)
+				{
+
+				}
+				PhysicsDebug.DrawLine(v, axis, Color.magenta);
 			}
 		}
 	}

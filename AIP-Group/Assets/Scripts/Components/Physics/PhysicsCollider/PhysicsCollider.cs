@@ -52,12 +52,13 @@ namespace PhysicsEngine.PhysicsColliders
         public void SetFromPhysicsBody()
 		{
             PhysicsBody body = (PhysicsBody)this.gameObject.GetComponent<PhysicsBody>();
+
             if (body.geometry == Geometry.Shapes.Point)
 			{
                 this.colliderShape = Geometry.Shapes.Point;
                 this.collisionGeometry = new PointCollider(this.transform.position);
 			}
-            if (body.geometry == Geometry.Shapes.Circle)
+            else if (body.geometry == Geometry.Shapes.Circle)
             {
                 this.colliderShape = Geometry.Shapes.Circle;
                 this.collisionGeometry = new CircleCollider(this.transform.position, this.transform.localScale.x / 2f);
@@ -75,6 +76,8 @@ namespace PhysicsEngine.PhysicsColliders
             else if (body.geometry == Geometry.Shapes.Polygon)
             {
                 this.colliderShape = Geometry.Shapes.Polygon;
+                Vector2[] vertices = this.GetComponent<Polygon>().vertices;
+                this.collisionGeometry = new PolygonCollider(this.transform.position, vertices);
             }
         }
 

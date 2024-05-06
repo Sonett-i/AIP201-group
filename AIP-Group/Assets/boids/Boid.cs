@@ -8,7 +8,7 @@ public class Boid : MonoBehaviour
 {
 
     
-    private int radius = 30;
+    //private int radius = 30;
  
     public float moveSpeed = 5f;
 
@@ -32,8 +32,8 @@ public class Boid : MonoBehaviour
 
     void Start()
     {
-   Xvel   = Random.Range(-1f,1f);
-   Yvel = Random.Range(-1f, 1f);
+        Xvel   = Random.Range(-1f,1f);
+        Yvel = Random.Range(-1f, 1f);
 
        // Xvel = 1f;
       //  Yvel = 1f;
@@ -152,13 +152,6 @@ public class Boid : MonoBehaviour
             newposition.y -= cameraheight;
 
         transform.position = newposition;
-        
-
-
-
-
-
-
     }
 
 

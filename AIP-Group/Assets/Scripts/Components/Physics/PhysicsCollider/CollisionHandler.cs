@@ -27,6 +27,8 @@ namespace PhysicsEngine.PhysicsColliders
             OBB_CIRCLE,
             OBB_AABB,
             OBB_OBB,
+            OBB_POLYGON,
+            POLYGON_POLYGON,
             INVALID
         }
 
@@ -34,14 +36,16 @@ namespace PhysicsEngine.PhysicsColliders
         public delegate Collision CollisionDelegate(PhysicsCollider colliderA, PhysicsCollider colliderB);
         public static Dictionary<CollisionType, CollisionDelegate> collisionTypes = new Dictionary<CollisionType, CollisionDelegate>()
         {
-			[CollisionType.POINT_POINT] = (colliderA, colliderB) => PointPointCollision(colliderA, colliderB),
+            [CollisionType.POINT_POINT] = (colliderA, colliderB) => PointPointCollision(colliderA, colliderB),
             [CollisionType.POINT_CIRCLE] = (colliderA, colliderB) => Placeholder(colliderA, colliderB),
             [CollisionType.POINT_AABB] = (colliderA, colliderB) => Placeholder(colliderA, colliderB),
             [CollisionType.CIRCLE_CIRCLE] = (colliderA, colliderB) => CircleCircleCollision(colliderA, colliderB),
             [CollisionType.CIRCLE_AABB] = (colliderA, colliderB) => Placeholder(colliderA, colliderB),
             [CollisionType.OBB_CIRCLE] = (colliderA, colliderB) => Placeholder(colliderA, colliderB),
             [CollisionType.AABB_AABB] = (colliderA, colliderB) => Placeholder(colliderA, colliderB),
-			[CollisionType.OBB_OBB] = (colliderA, colliderB) => OBBCollision(colliderA, colliderB),
+            [CollisionType.OBB_OBB] = (colliderA, colliderB) => OBBCollision(colliderA, colliderB),
+            [CollisionType.OBB_POLYGON] = (colliderA, colliderB) => PolygonCollision(colliderA, colliderB),
+			[CollisionType.POLYGON_POLYGON] = (colliderA, colliderB) => PolygonCollision(colliderA, colliderB),
             [CollisionType.INVALID] = (colliderA, colliderB) => Placeholder(colliderA, colliderB),
         };
 
@@ -63,7 +67,8 @@ namespace PhysicsEngine.PhysicsColliders
                 {(Geometry.Shapes.OBB, Geometry.Shapes.Point), CollisionType.OBB_POINT},
                 {(Geometry.Shapes.OBB, Geometry.Shapes.Circle), CollisionType.OBB_CIRCLE},
                 {(Geometry.Shapes.OBB, Geometry.Shapes.AABB), CollisionType.OBB_AABB},
-                {(Geometry.Shapes.OBB, Geometry.Shapes.OBB), CollisionType.OBB_OBB}
+                {(Geometry.Shapes.OBB, Geometry.Shapes.OBB), CollisionType.OBB_OBB},
+                {(Geometry.Shapes.Polygon, Geometry.Shapes.Polygon), CollisionType.POLYGON_POLYGON}
                 // Add more mappings as needed
             };
 
@@ -85,7 +90,7 @@ namespace PhysicsEngine.PhysicsColliders
         // Point Collisions
         public static Collision PointPointCollision(PhysicsCollider a, PhysicsCollider b)
 		{
-            Debug.Log("POINTPOINT");
+            //Debug.Log("POINTPOINT");
             Collision collision = new Collision() { Colliding = false };
             return collision;
 		}
@@ -164,6 +169,23 @@ namespace PhysicsEngine.PhysicsColliders
 
             return collision;
 		}
+
+        public static Collision PolygonCollision(PhysicsCollider a, PhysicsCollider b)
+		{
+            // Debug.Log("PolygonCol");
+            Collision collision = new Collision() { Colliding = false };
+
+            PolygonCollider aCollider = a.collisionGeometry as PolygonCollider;
+            PolygonCollider bCollider = b.collisionGeometry as PolygonCollider;
+
+            if (aCollider.TransformedVertices != null && bCollider.TransformedVertices != null)
+			{
+                collision.Colliding = SAT.IntersectPolygons(aCollider.TransformedVertices, bCollider.TransformedVertices);
+            }
+
+            return collision;
+        }
+
         // placeholder delegate, remove prior to shipping lol
         public static Collision Placeholder(PhysicsCollider a, PhysicsCollider b)
         {
@@ -175,7 +197,33 @@ namespace PhysicsEngine.PhysicsColliders
 		#endregion
 
 		#region Abstraction
-		public static Collision HandleCollision(PhysicsCollider colliderA, PhysicsCollider colliderB)
+
+        public static void UpdateShapes(PhysicsCollider colliderA, PhysicsCollider colliderB)
+		{
+            if (colliderA.collisionGeometry.requiresUpdate)
+            {
+                colliderA.collisionGeometry.Update(colliderA.transform.position, colliderA.transform.localScale, colliderA.transform.rotation);
+                if (colliderA.colliderShape == Geometry.Shapes.Polygon)
+                {
+                    colliderA.collisionGeometry.UpdateGeometry(colliderA.GetComponent<Polygon>().transformedVertices);
+
+                }
+            }
+
+
+            if (colliderB.collisionGeometry.requiresUpdate)
+            {
+                colliderB.collisionGeometry.Update(colliderB.transform.position, colliderB.transform.localScale, colliderB.transform.rotation);
+                if (colliderB.colliderShape == Geometry.Shapes.Polygon)
+				{
+                    colliderB.collisionGeometry.UpdateGeometry(colliderB.GetComponent<Polygon>().transformedVertices);
+
+                }
+            }
+
+        }
+
+        public static Collision HandleCollision(PhysicsCollider colliderA, PhysicsCollider colliderB)
 		{
             Collision collision = new Collision() { Colliding = false };
 
@@ -183,12 +231,9 @@ namespace PhysicsEngine.PhysicsColliders
 
             if (colliderA.collisionGeometry != null && colliderB.collisionGeometry != null)
 			{
-                if (colliderA.collisionGeometry.requiresUpdate)
-                    colliderA.collisionGeometry.Update(colliderA.transform.position, colliderA.transform.localScale, colliderA.transform.rotation);
+                UpdateShapes(colliderA, colliderB);
 
-                if (colliderB.collisionGeometry.requiresUpdate)
-                    colliderB.collisionGeometry.Update(colliderB.transform.position, colliderB.transform.localScale, colliderB.transform.rotation);
-
+                //Debug.Log(GetCollisionType(colliderA.collisionGeometry.Shape, colliderB.collisionGeometry.Shape));
                 collision = collisionTypes[GetCollisionType(colliderA.collisionGeometry.Shape, colliderB.collisionGeometry.Shape)].Invoke(colliderA, colliderB);
 
                 

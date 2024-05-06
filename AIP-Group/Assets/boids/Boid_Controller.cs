@@ -9,7 +9,7 @@ public class Boid_Controller : MonoBehaviour
 
     public GameObject[] boidinstances;
 
-    public Camera camera;
+    new public Camera camera;
 
     public GameObject Asteroid_Spawner;
 

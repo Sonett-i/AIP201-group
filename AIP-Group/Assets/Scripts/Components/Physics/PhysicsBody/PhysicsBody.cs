@@ -96,15 +96,12 @@ namespace PhysicsEngine.PhysicsBodies
             GetComponents();
         }
 
-        // Update is called once per frame
-        void Update()
-        {
 
-        }
 
         void GetComponents()
 		{
             colliderComponent = this.GetComponent<PhysicsCollider>();
+
 
             if (colliderComponent == null)
 			{
@@ -127,6 +124,16 @@ namespace PhysicsEngine.PhysicsBodies
                 Width = 0;
                 Height = 0;
             }
+            else if (this.geometry == Geometry.Shapes.Polygon)
+			{
+                if (this.GetComponent<Polygon>())
+				{
+                    this.Area = this.GetComponent<Polygon>().Area();
+				}
+                Width = 1;
+                Height = 1;
+                Radius = 0;
+			}
             else
             {
                 Width = this.transform.localScale.x;
@@ -135,7 +142,6 @@ namespace PhysicsEngine.PhysicsBodies
 
                 Radius = 0;
             }
-
 
             InverseMass = (bodyType == BodyType.Static) ? 0 : 1f / Mass;
             Restitution = Piecewise.Clamp(Restitution, 0f, 1f);

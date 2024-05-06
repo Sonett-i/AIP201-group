@@ -10,9 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 6018685481012495901}
   - component: {fileID: -7446464349365835737}
-  - component: {fileID: -1457616584923986172}
   - component: {fileID: 2880502616508210848}
   - component: {fileID: -2644377475929928539}
+  - component: {fileID: -1457616584923986172}
+  - component: {fileID: 3077186217926378405}
   m_Layer: 0
   m_Name: Polygon
   m_TagString: Untagged
@@ -29,9 +30,9 @@ Transform:
   m_GameObject: {fileID: 6689828894879580125}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -4.45, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -47,7 +48,53 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b4e8e529dade8e4682477c877d740fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  vertices: []
+  vertices:
+  - {x: 1, y: 1}
+  - {x: 1, y: -1}
+  - {x: -1, y: -1}
+  - {x: -1, y: 1}
+--- !u!114 &2880502616508210848
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6689828894879580125}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b242e66c2827101469b066d34331461f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bodyType: 0
+  geometry: 4
+  LinearVelocity: {x: 12.61, y: 0, z: 0}
+  Acceleration: {x: 1.08, y: 0, z: 0}
+  Rotation: 0
+  RotationalVelocity: 0
+  Density: 1
+  Mass: 4
+  InverseMass: 0.25
+  Restitution: 0
+  Area: 4
+  Radius: 0
+  Width: 1
+  Height: 1
+--- !u!114 &-2644377475929928539
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6689828894879580125}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd23b790d3d33334f8a05cab925a52df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  colliderShape: 4
+  isTrigger: 0
+  collidingObjects: []
+  requiresUpdate: 0
 --- !u!120 &-1457616584923986172
 LineRenderer:
   serializedVersion: 2
@@ -69,7 +116,7 @@ LineRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 0}
+  - {fileID: 2100000, guid: 6c5e94f379d8765439b31d64d35ee957, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -91,8 +138,10 @@ LineRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Positions:
-  - {x: 0, y: 0, z: 0}
-  - {x: 0, y: 0, z: 1}
+  - {x: -3.4499998, y: 1, z: 0}
+  - {x: -3.4499998, y: -1, z: 0}
+  - {x: -5.45, y: -1, z: 0}
+  - {x: -5.45, y: 1, z: 0}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 1
@@ -100,8 +149,8 @@ LineRenderer:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
-        time: 0
-        value: 1
+        time: 0.004032135
+        value: 0.118421555
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -152,7 +201,7 @@ LineRenderer:
   m_UseWorldSpace: 1
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
---- !u!114 &2880502616508210848
+--- !u!114 &3077186217926378405
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -170,27 +219,11 @@ MonoBehaviour:
   Acceleration: {x: 0, y: 0, z: 0}
   Rotation: 0
   RotationalVelocity: 0
-  Density: 0
-  Mass: 0
-  InverseMass: Infinity
+  Density: 1
+  Mass: 4
+  InverseMass: 0.25
   Restitution: 0
-  Area: 1
+  Area: 4
   Radius: 0
   Width: 1
   Height: 1
---- !u!114 &-2644377475929928539
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6689828894879580125}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bd23b790d3d33334f8a05cab925a52df, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  colliderShape: 4
-  isTrigger: 0
-  collidingObjects: []
-  requiresUpdate: 0
