@@ -8,7 +8,7 @@ namespace PhysicsEngine.PhysicsColliders
     {
         public PointCollider(Vector3 position) : base(position) 
         {
-            base.Shape = MathU.Geometry.Geometry.Shapes.Point;
+            //base.Shape = MathU.Geometry.Geometry.Shapes.Point;
         }
 
     }

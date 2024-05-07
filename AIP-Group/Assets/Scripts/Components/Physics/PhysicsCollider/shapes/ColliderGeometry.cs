@@ -40,27 +40,21 @@ namespace PhysicsEngine.PhysicsColliders
 		{
 			this.Position = position;
 
-			if (this is AABBCollider)
+			if (this is CircleCollider)
 			{
-				AABBCollider AABB = (AABBCollider)this;
-				AABB.UpdateAABB(position, scale);
+				CircleCollider Circle = (CircleCollider)this;
+				Circle.UpdateCircle(scale.x / 2f);
 			}
 			else if (this is OBBCollider)
 			{
 				OBBCollider OBB = (OBBCollider)this;
 				OBB.UpdateOBB(position, rotation.eulerAngles, scale);
 			}
-			else if (this is CircleCollider)
-			{
-				CircleCollider Circle = (CircleCollider)this;
-				Circle.UpdateCircle(scale.x / 2f);
-			}
 			else if (this is PolygonCollider)
 			{
 				PolygonCollider Polygon = (PolygonCollider)this;
 				Polygon.UpdatePolygon(position, rotation.eulerAngles, scale);
 			}
-			//update AABB
 
 			requiresUpdate = false;
 		}

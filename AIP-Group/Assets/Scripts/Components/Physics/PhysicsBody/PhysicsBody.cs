@@ -38,7 +38,7 @@ namespace PhysicsEngine.PhysicsBodies
         public float Rotation;
         public float RotationalVelocity;
 
-        public float Density; // g/cm^3
+        public float Density = 1f; // g/cm^3
         public float Mass = 1f; // area * density 
         public float InverseMass = 0.1f;
         public float Restitution; // e

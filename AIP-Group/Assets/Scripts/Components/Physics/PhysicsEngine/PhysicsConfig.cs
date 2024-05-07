@@ -10,5 +10,5 @@ public class PhysicsConfig : MonoBehaviour
 	public static Color CollidingColour = Color.red;
 	public static Color DefaultDebugColour = Color.green;
 
-	public static bool debugMode = true;
+	public static bool debugMode = false;
 }

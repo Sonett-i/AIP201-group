@@ -25,8 +25,7 @@ namespace PhysicsEngine.PhysicsColliders
         public void UpdateVertices(Vector2[] vertices)
 		{
             this.TransformedVertices = vertices;
-		}
-        // store vertices
+        }
     }
 }
 

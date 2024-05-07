@@ -64,7 +64,7 @@ public class Polygon : MonoBehaviour
 
         for (int i = 0; i < transformedVertices.Length; i++)
 		{
-            Vector2 vT = Transform(vertices[i], -transform.localRotation.eulerAngles.z);
+            Vector2 vT = Transform(vertices[i], -transform.localRotation.eulerAngles.z) * this.transform.localScale;
             transformedVertices[i] = vT + (Vector2)this.transform.position;
 		}
 

@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &6689828894879580125
+--- !u!1 &2591603002790019249
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,63 +8,75 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 6018685481012495901}
-  - component: {fileID: -7446464349365835737}
-  - component: {fileID: 2880502616508210848}
-  - component: {fileID: -2644377475929928539}
-  - component: {fileID: -1457616584923986172}
-  - component: {fileID: 3077186217926378405}
+  - component: {fileID: 6852966701245709472}
+  - component: {fileID: -367865873548754157}
+  - component: {fileID: -4503908474306073913}
+  - component: {fileID: 8544413179617356846}
+  - component: {fileID: 5094854633799931137}
+  - component: {fileID: 5735010030635683636}
   m_Layer: 0
-  m_Name: Polygon
+  m_Name: Boid
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &6018685481012495901
+--- !u!4 &6852966701245709472
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6689828894879580125}
+  m_GameObject: {fileID: 2591603002790019249}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.45, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 1
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &-7446464349365835737
+--- !u!114 &-367865873548754157
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6689828894879580125}
+  m_GameObject: {fileID: 2591603002790019249}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e07e878a6ccbf4e4aad7055148378dbf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &-4503908474306073913
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2591603002790019249}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4b4e8e529dade8e4682477c877d740fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   vertices:
-  - {x: 1, y: 1}
-  - {x: 1, y: -1}
-  - {x: -1, y: -1}
-  - {x: -1, y: 1}
+  - {x: 0, y: 1}
+  - {x: 0.5, y: 0}
+  - {x: 0, y: 0.2}
+  - {x: -0.5, y: 0}
   transformedVertices:
-  - {x: -3.4499998, y: 1}
-  - {x: -3.4499998, y: -1}
-  - {x: -5.45, y: -1}
-  - {x: -5.45, y: 1}
---- !u!114 &2880502616508210848
+  - {x: 0, y: 1}
+  - {x: 0.5, y: 0}
+  - {x: 0, y: 0.2}
+  - {x: -0.5, y: 0}
+--- !u!114 &8544413179617356846
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6689828894879580125}
+  m_GameObject: {fileID: 2591603002790019249}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b242e66c2827101469b066d34331461f, type: 3}
@@ -76,21 +88,21 @@ MonoBehaviour:
   Acceleration: {x: 0, y: 0, z: 0}
   Rotation: 0
   RotationalVelocity: 0
-  Density: 1
-  Mass: 4
-  InverseMass: 0.25
+  Density: 0
+  Mass: 0
+  InverseMass: Infinity
   Restitution: 0
-  Area: 4
+  Area: 0.4
   Radius: 0
   Width: 1
   Height: 1
---- !u!114 &-2644377475929928539
+--- !u!114 &5094854633799931137
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6689828894879580125}
+  m_GameObject: {fileID: 2591603002790019249}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bd23b790d3d33334f8a05cab925a52df, type: 3}
@@ -100,14 +112,14 @@ MonoBehaviour:
   isTrigger: 0
   collidingObjects: []
   requiresUpdate: 0
---- !u!120 &-1457616584923986172
+--- !u!120 &5735010030635683636
 LineRenderer:
   serializedVersion: 2
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6689828894879580125}
+  m_GameObject: {fileID: 2591603002790019249}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -121,7 +133,7 @@ LineRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 6c5e94f379d8765439b31d64d35ee957, type: 2}
+  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -143,11 +155,11 @@ LineRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Positions:
-  - {x: -3.4499998, y: 1, z: 0}
-  - {x: -3.4499998, y: -1, z: 0}
-  - {x: -5.45, y: -1, z: 0}
-  - {x: -5.45, y: 1, z: 0}
-  - {x: -3.4499998, y: 1, z: 0}
+  - {x: 0, y: 1, z: 0}
+  - {x: 0.5, y: 0, z: 0}
+  - {x: 0, y: 0.2, z: 0}
+  - {x: -0.5, y: 0, z: 0}
+  - {x: 0, y: 1, z: 0}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 1
@@ -156,7 +168,7 @@ LineRenderer:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0.022764206
+        value: 0.008703023
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -207,29 +219,3 @@ LineRenderer:
   m_UseWorldSpace: 1
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
---- !u!114 &3077186217926378405
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6689828894879580125}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b242e66c2827101469b066d34331461f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bodyType: 0
-  geometry: 4
-  LinearVelocity: {x: 0, y: 0, z: 0}
-  Acceleration: {x: 0, y: 0, z: 0}
-  Rotation: 0
-  RotationalVelocity: 0
-  Density: 1
-  Mass: 4
-  InverseMass: 0.25
-  Restitution: 0
-  Area: 4
-  Radius: 0
-  Width: 1
-  Height: 1

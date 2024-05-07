@@ -82,7 +82,6 @@ namespace PhysicsEngine.PhysicsColliders
             this.Rotation = GetRotation(rotation);
 
             base.rotation = Quaternion.Euler(0, 0, Rotation);
-            //Debug.Log(Rotation * Mathf.Rad2Deg);
 
             this.Vertices = UpdateVertices();
 
