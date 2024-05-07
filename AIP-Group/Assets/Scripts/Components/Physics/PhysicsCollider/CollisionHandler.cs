@@ -16,6 +16,7 @@ namespace PhysicsEngine.PhysicsColliders
             OBB_OBB,
             OBB_POLYGON,
             POLYGON_POLYGON,
+            POLYGON_CIRCLE,
             INVALID
         }
 
@@ -25,8 +26,9 @@ namespace PhysicsEngine.PhysicsColliders
         {
             [CollisionType.CIRCLE_CIRCLE] = (colliderA, colliderB) => CircleCircleCollision(colliderA, colliderB),
 			[CollisionType.CIRCLE_POLYGON] = (colliderA, colliderB) => CirclePolygonCollision(colliderA, colliderB),
-            [CollisionType.OBB_OBB] = (colliderA, colliderB) => OBBCollision(colliderA, colliderB),
-            [CollisionType.OBB_POLYGON] = (colliderA, colliderB) => PolygonOBBCollision(colliderA, colliderB),
+			[CollisionType.POLYGON_CIRCLE] = (colliderA, colliderB) => PolygonCircleCollision(colliderA, colliderB),
+            //[CollisionType.OBB_OBB] = (colliderA, colliderB) => OBBCollision(colliderA, colliderB),
+            //[CollisionType.OBB_POLYGON] = (colliderA, colliderB) => PolygonOBBCollision(colliderA, colliderB),
 			[CollisionType.POLYGON_POLYGON] = (colliderA, colliderB) => PolygonCollision(colliderA, colliderB),
             [CollisionType.INVALID] = (colliderA, colliderB) => Placeholder(colliderA, colliderB),
         };
@@ -36,9 +38,10 @@ namespace PhysicsEngine.PhysicsColliders
                 // Define mappings for each combination of shapes
                 {(Geometry.Shapes.Circle, Geometry.Shapes.Circle), CollisionType.CIRCLE_CIRCLE},
                 {(Geometry.Shapes.Circle, Geometry.Shapes.Polygon), CollisionType.CIRCLE_POLYGON},
-                {(Geometry.Shapes.OBB, Geometry.Shapes.OBB), CollisionType.OBB_OBB},
-                {(Geometry.Shapes.OBB, Geometry.Shapes.Polygon), CollisionType.OBB_POLYGON},
+                //{(Geometry.Shapes.OBB, Geometry.Shapes.OBB), CollisionType.OBB_OBB},
+                //{(Geometry.Shapes.OBB, Geometry.Shapes.Polygon), CollisionType.OBB_POLYGON},
                 {(Geometry.Shapes.Polygon, Geometry.Shapes.Polygon), CollisionType.POLYGON_POLYGON},
+                {(Geometry.Shapes.Polygon, Geometry.Shapes.Circle), CollisionType.POLYGON_CIRCLE},
 
                 // Add more mappings as needed
             };
@@ -87,13 +90,39 @@ namespace PhysicsEngine.PhysicsColliders
 		{
             Collision collision = new Collision() { Colliding = false };
 
-            CircleCollider colliderA = a.collisionGeometry as CircleCollider;
-            PolygonCollider colliderB = b.collisionGeometry as PolygonCollider;
+            CircleCollider colliderA = null;
+            PolygonCollider colliderB = null;
 
-            collision = SAT.IntersectCirclePolygon(a.transform.position, colliderA.Radius, colliderB.TransformedVertices);
+            if (a.collisionGeometry.Shape is Geometry.Shapes.Circle)
+			{
+                colliderA = a.collisionGeometry as CircleCollider;
+                colliderB = b.collisionGeometry as PolygonCollider;
+			}
+
+            if (colliderA != null && colliderB != null)
+                collision = SAT.IntersectCirclePolygon(a.transform.position, colliderA.Radius, colliderB.TransformedVertices);
 
             return collision;
 		}
+
+        public static Collision PolygonCircleCollision(PhysicsCollider a, PhysicsCollider b)
+        {
+            Collision collision = new Collision() { Colliding = false };
+
+            PolygonCollider colliderA = null;
+            CircleCollider colliderB = null;
+
+            if (a.collisionGeometry.Shape is Geometry.Shapes.Polygon)
+            {
+                colliderA = a.collisionGeometry as PolygonCollider;
+                colliderB = b.collisionGeometry as CircleCollider;
+            }
+
+            if (colliderA != null && colliderB != null)
+                collision = SAT.IntersectCirclePolygon(b.transform.position, colliderB.Radius, colliderA.TransformedVertices, true);
+
+            return collision;
+        }
 
         // https://research.ncl.ac.uk/game/mastersdegree/gametechnologies/previousinformation/physics4collisiondetection/2017%20Tutorial%204%20-%20Collision%20Detection.pdf
         public static Collision OBBCollision(PhysicsCollider a, PhysicsCollider b)
@@ -178,9 +207,10 @@ namespace PhysicsEngine.PhysicsColliders
 
             if (colliderA.collisionGeometry != null && colliderB.collisionGeometry != null)
 			{
-                UpdateShapes(colliderA, colliderB);
+                //UpdateShapes(colliderA, colliderB);
 
                 //Debug.Log(GetCollisionType(colliderA.collisionGeometry.Shape, colliderB.collisionGeometry.Shape));
+
                 collision = collisionTypes[GetCollisionType(colliderA.collisionGeometry.Shape, colliderB.collisionGeometry.Shape)].Invoke(colliderA, colliderB);
 
                 

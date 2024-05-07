@@ -18,7 +18,7 @@ namespace MathU.Geometry
 			z,
 		}
 
-		public static PhysicsEngine.PhysicsColliders.Collision IntersectCirclePolygon(Vector2 circleCenter, float circleRadius, Vector2[] vertices)
+		public static PhysicsEngine.PhysicsColliders.Collision IntersectCirclePolygon(Vector2 circleCenter, float circleRadius, Vector2[] vertices, bool flip = false)
 		{
 			PhysicsEngine.PhysicsColliders.Collision collision = new PhysicsEngine.PhysicsColliders.Collision();
 
@@ -82,7 +82,7 @@ namespace MathU.Geometry
 
 			Vector2 centerB = Centroid(vertices);
 
-			Vector2 direction = centerB - circleCenter;
+			Vector2 direction = (!flip) ? centerB - circleCenter : circleCenter - centerB;
 
 			if (Vector2.Dot(direction, collision.normal) < 0f)
 			{

@@ -33,6 +33,7 @@ namespace PhysicsEngine.PhysicsColliders
         // Start is called before the first frame update
         void Start()
         {
+            this.requiresUpdate = true;
             if (this.gameObject.GetComponent<PhysicsBody>())
             {
                 SetFromPhysicsBody();
@@ -42,10 +43,7 @@ namespace PhysicsEngine.PhysicsColliders
         // Update is called once per frame
         void Update()
         {
-            if (this.colliderShape == Geometry.Shapes.OBB)
-			{
-                this.collisionGeometry.Update(this.transform.position, this.transform.localScale, this.transform.rotation);
-			}
+            this.collisionGeometry.Update(this.transform.position, this.transform.localScale, this.transform.rotation);
         }
 
         // Set Collider Info From Physics

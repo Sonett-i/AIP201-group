@@ -99,14 +99,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bodyType: 0
-  geometry: 0
+  geometry: 1
   LinearVelocity: {x: 0, y: 0, z: 0}
   Acceleration: {x: 0, y: 0, z: 0}
   Rotation: 0
   RotationalVelocity: 0
   Density: 1
   Mass: 0.7853982
-  InverseMass: 0.2942954
+  InverseMass: 1.2732395
   Restitution: 0
   Area: 0.7853982
   Radius: 0.5
@@ -124,3 +124,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd23b790d3d33334f8a05cab925a52df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  colliderShape: 1
+  isTrigger: 0
+  collidingObjects: []
+  requiresUpdate: 1
