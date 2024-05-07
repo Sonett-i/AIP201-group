@@ -6,9 +6,15 @@ using PhysicsEngine.PhysicsColliders;
 
 public class PlayerControl : MonoBehaviour
 {
+    
+
     [SerializeField] float movementSpeed = 3;
     PhysicsBody pb;
     PhysicsCollider pc;
+
+    // register events
+
+    
 
     Vector3 force;
     Quaternion rotation = Quaternion.identity;
@@ -31,11 +37,24 @@ public class PlayerControl : MonoBehaviour
 		}
 	}
 
+    private void isColliding(PhysicsEngine.PhysicsColliders.Collision collision)
+	{
+        Debug.Log("COLLIDING");
+	}
+
+    private void isTriggering(PhysicsEngine.PhysicsColliders.Collision collision)
+	{
+        Debug.Log("TRIGGER");
+    }
+
     // Start is called before the first frame update
     void Start()
     {
         pb = this.GetComponent<PhysicsBody>();
         pc = this.GetComponent<PhysicsCollider>();
+
+        pc.PhysicsCollisionEnterEvent += isColliding;
+        pc.PhysicsTriggerEnterEvent += isTriggering;
     }
 
     // Update is called once per frame

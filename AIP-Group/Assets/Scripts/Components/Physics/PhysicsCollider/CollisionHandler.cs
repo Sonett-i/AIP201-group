@@ -140,13 +140,11 @@ namespace PhysicsEngine.PhysicsColliders
 
         public static Collision PolygonCollision(PhysicsCollider a, PhysicsCollider b)
 		{
-            // Debug.Log("PolygonCol");
             Collision collision = new Collision() { Colliding = false };
 
             PolygonCollider aCollider = a.collisionGeometry as PolygonCollider;
             PolygonCollider bCollider = b.collisionGeometry as PolygonCollider;
-
-            //collision.Colliding = SAT.IntersectPolygons(a.GetComponent<Polygon>().transformedVertices, b.GetComponent<Polygon>().transformedVertices);
+            
             collision = SAT.IntersectPolygons(aCollider.TransformedVertices, bCollider.TransformedVertices);
 
             return collision;
@@ -159,7 +157,6 @@ namespace PhysicsEngine.PhysicsColliders
             OBBCollider aCollider = a.collisionGeometry as OBBCollider;
             PolygonCollider bCollider = b.collisionGeometry as PolygonCollider;
 
-            //collision.Colliding = SAT.IntersectPolygons(a.GetComponent<Polygon>().transformedVertices, b.GetComponent<Polygon>().transformedVertices);
             collision = SAT.IntersectPolygons(aCollider.TransformedVertices, bCollider.Vertices);
 
             return collision;
@@ -207,10 +204,6 @@ namespace PhysicsEngine.PhysicsColliders
 
             if (colliderA.collisionGeometry != null && colliderB.collisionGeometry != null)
 			{
-                //UpdateShapes(colliderA, colliderB);
-
-                //Debug.Log(GetCollisionType(colliderA.collisionGeometry.Shape, colliderB.collisionGeometry.Shape));
-
                 collision = collisionTypes[GetCollisionType(colliderA.collisionGeometry.Shape, colliderB.collisionGeometry.Shape)].Invoke(colliderA, colliderB);
 
                 
@@ -247,10 +240,54 @@ namespace PhysicsEngine.PhysicsColliders
         {
             if (Colliding == false)
                 return;
+            bool isTrigger = false;
 
-
-            colliderA.GetComponent<PhysicsBody>().Move(-normal * (intersection / 2f));
-            colliderB.GetComponent<PhysicsBody>().Move(normal * (intersection / 2f));
+            if (colliderA.isTrigger || colliderB.isTrigger)
+			{
+                isTrigger = true;
+			}
+            else
+			{
+                colliderA.GetComponent<PhysicsBody>().Move(-normal * (intersection / 2f));
+                colliderB.GetComponent<PhysicsBody>().Move(normal * (intersection / 2f));
+            }
+               
+            Broadcast(isTrigger);
         }
+
+        public void Broadcast(bool isTrigger)
+		{
+            if (Colliding)
+			{
+                if (colliderA != null)
+                {
+                    if (isTrigger)
+					{
+                        colliderA.PhysicsTriggerEnter(this);
+
+                    }
+                    else
+					{
+                        colliderA.PhysicsCollisionEnter(this);
+
+                    }
+                }
+
+                if (colliderB != null)
+                {
+                    if (isTrigger)
+                    {
+                        colliderB.PhysicsTriggerEnter(this);
+
+                    }
+                    else
+                    {
+                        colliderB.PhysicsCollisionEnter(this);
+
+                    }
+                }
+            }
+            //send events to each colliding object
+		}
     }
 }

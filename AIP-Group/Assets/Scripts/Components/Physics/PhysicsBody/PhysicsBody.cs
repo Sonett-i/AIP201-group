@@ -53,6 +53,11 @@ namespace PhysicsEngine.PhysicsBodies
         Vector3 lastPosition;
         Vector3 lastScale;
         Quaternion lastRotation;
+
+        public void Step(float time)
+		{
+            this.transform.position += this.LinearVelocity * time;
+		}
         public void AddForce(Vector3 force, ForceType forceType)
         {
             if (this.bodyType != BodyType.Static)
@@ -74,16 +79,19 @@ namespace PhysicsEngine.PhysicsBodies
 
         public void MoveTo(Vector3 position)
         {
-            this.transform.position = position;
+            if (this.bodyType != BodyType.Static)
+			{
+                this.transform.position = position;
 
-            if (this.GetComponent<PhysicsCollider>() != null)
-            {
-                this.GetComponent<PhysicsCollider>().collisionGeometry.requiresUpdate = HasMoved();
+                if (this.GetComponent<PhysicsCollider>() != null)
+                {
+                    this.GetComponent<PhysicsCollider>().collisionGeometry.requiresUpdate = HasMoved();
+                }
+
+                lastPosition = this.transform.position;
+                lastRotation = this.transform.localRotation;
+                lastScale = this.transform.localScale;
             }
-
-            lastPosition = this.transform.position;
-            lastRotation = this.transform.localRotation;
-            lastScale = this.transform.localScale;
         }
 
         bool HasMoved()

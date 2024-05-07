@@ -28,8 +28,11 @@ namespace PhysicsEngine.Engine
         {
             foreach (PhysicsBody body in physicsBodies)
             {
-                body.AddForce(body.Acceleration, PhysicsBody.ForceType.Impulse);
-                body.AddForce(Gravity, PhysicsBody.ForceType.Impulse);
+                if (body.bodyType != PhysicsBody.BodyType.Static)
+				{
+                    body.AddForce(body.Acceleration, PhysicsBody.ForceType.Impulse);
+                    body.AddForce(Gravity, PhysicsBody.ForceType.Impulse);
+                }
             }
         }
 
@@ -82,7 +85,7 @@ namespace PhysicsEngine.Engine
         {
             foreach (PhysicsBody body in physicsBodies)
             {
-                if (body)
+                if (body && body.bodyType != PhysicsBody.BodyType.Static)
                 {
                     body.Move(body.LinearVelocity * Time.deltaTime);
                 }
@@ -123,6 +126,11 @@ namespace PhysicsEngine.Engine
                 UpdateCollisions();
             }
         }
+
+        public void Step(float time)
+		{
+
+		}
     }
 }
 

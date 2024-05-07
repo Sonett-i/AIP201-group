@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using PhysicsEngine.PhysicsBodies;
 using MathU.Geometry;
+using UnityEngine.Events;
 
 /*  File: Physics Collider
  * 
@@ -13,10 +14,18 @@ namespace PhysicsEngine.PhysicsColliders
 {
     public class PhysicsCollider : MonoBehaviour
     {
-		[Header("Collider Config")]
+        // Events
+        public delegate void CollisionEvent(PhysicsColliders.Collision collision);
+        public event CollisionEvent PhysicsCollisionEnterEvent;
+
+        public delegate void TriggerEvent(PhysicsColliders.Collision collision);
+        public event TriggerEvent PhysicsTriggerEnterEvent;
+
+        [Header("Collider Config")]
 		[Tooltip("Update this from PhysicsBody component if object has a PhysicsBody component.")]
         public Geometry.Shapes colliderShape = Geometry.Shapes.Circle;
         public bool isTrigger = false;
+        [SerializeField] Vector3 scale = Vector3.zero;
 
 		[Header("Debugging")]
         // Objects this collider is colliding with.
@@ -26,26 +35,23 @@ namespace PhysicsEngine.PhysicsColliders
         public ColliderGeometry collisionGeometry;
         public bool requiresUpdate = false;
 
-        public void PhysicsTrigger(PhysicsCollider other)
+        public UnityEvent colliding;
+
+        public void PhysicsTriggerEnter(PhysicsColliders.Collision collision)
 		{
-            
-		}
-        // Start is called before the first frame update
-        void Start()
-        {
-            this.requiresUpdate = true;
-            if (this.gameObject.GetComponent<PhysicsBody>())
+            if (PhysicsTriggerEnterEvent != null)
             {
-                SetFromPhysicsBody();
+                PhysicsTriggerEnterEvent.Invoke(collision);
             }
         }
 
-        // Update is called once per frame
-        void Update()
-        {
-            this.collisionGeometry.Update(this.transform.position, this.transform.localScale, this.transform.rotation);
-        }
-
+        public void PhysicsCollisionEnter(PhysicsColliders.Collision collision)
+		{
+            if (PhysicsCollisionEnterEvent != null)
+			{
+                PhysicsCollisionEnterEvent.Invoke(collision);
+			}
+		}
         // Set Collider Info From Physics
         public void SetFromPhysicsBody()
 		{
@@ -79,8 +85,31 @@ namespace PhysicsEngine.PhysicsColliders
             }
         }
 
-		private void OnValidate()
+        // Start is called before the first frame update
+        void Start()
+        {
+            this.requiresUpdate = true;
+
+
+            if (this.gameObject.GetComponent<PhysicsBody>())
+            {
+                SetFromPhysicsBody();
+            }
+        }
+
+        // Update is called once per frame
+        void Update()
+        {
+            this.collisionGeometry.Update(this.transform.position, scale, this.transform.rotation);
+        }
+
+        private void OnValidate()
 		{
+            if (scale == Vector3.zero)
+            {
+                scale = this.transform.localScale;
+            }
+
             if (this.gameObject.GetComponent<PhysicsBody>())
 			{
                 SetFromPhysicsBody();
@@ -95,7 +124,7 @@ namespace PhysicsEngine.PhysicsColliders
 
         private void OnDrawGizmos()
         {
-            PhysicsDebug.DrawShape(this.colliderShape, this.transform.position, this.transform.rotation, this.transform.localScale, Color.green);
+            PhysicsDebug.DrawShape(this.colliderShape, this.transform.position, this.transform.rotation, scale, Color.green);
         }
     }
 }

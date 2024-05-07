@@ -98,8 +98,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   colliderShape: 4
   isTrigger: 0
+  scale: {x: 1, y: 1, z: 1}
   collidingObjects: []
   requiresUpdate: 0
+  colliding:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!120 &-1457616584923986172
 LineRenderer:
   serializedVersion: 2
