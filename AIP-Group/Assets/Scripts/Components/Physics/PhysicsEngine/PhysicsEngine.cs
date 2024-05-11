@@ -113,8 +113,21 @@ namespace PhysicsEngine.Engine
             {
                 BroadPhase();
             }
+            StartCoroutine(Stepper());
         }
 
+        [SerializeField] float stepDuration = 1.5f;
+        IEnumerator Stepper()
+		{
+            step = 0;
+            while (step < 4)
+			{
+                yield return new WaitForSeconds(stepDuration);
+                step++;
+			}
+            StartCoroutine(Stepper());
+		}
+        public static int step = 0;
         // Update is called once per frame
         void Update()
         {
@@ -131,6 +144,25 @@ namespace PhysicsEngine.Engine
 		{
 
 		}
+
+        public static IEnumerator Visualize(Vector2[] vertices)
+        {
+            for (int i = 0; i < vertices.Length; i++)
+            {
+                Vector2 vA = vertices[i]; // vertex A
+                Vector2 vB = vertices[(i + 1) % vertices.Length]; // vertex B
+
+                Vector2 edge = vB - vA;
+                Vector2 axis = new Vector2(-edge.y, edge.x);
+
+                Debug.DrawLine(axis, vA, Color.cyan);
+                Debug.DrawLine(axis, vB, Color.cyan);
+
+                Debug.DrawLine(edge, axis, Color.cyan);
+
+                yield return new WaitForSeconds(0.25f);
+            }
+        }
     }
 }
 

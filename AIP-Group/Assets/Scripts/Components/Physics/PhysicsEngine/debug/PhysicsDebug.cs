@@ -18,6 +18,15 @@ public class PhysicsDebug : MonoBehaviour
         max
     }
 
+    public static int step = 0;
+    public static IEnumerator Step()
+	{
+        while (step < 3)
+		{
+            yield return new WaitForSeconds(1f);
+            step++;
+		}
+	}
 
     // Drawing
 
@@ -46,12 +55,29 @@ public class PhysicsDebug : MonoBehaviour
         }
 	}
 
-    public static void DrawPolygon(Vector2[] vertices, Color color)
+    public static void DrawPolygon(Vector2[] vertices, Color colour)
 	{
         for (int i = 0; i < vertices.Length; i++)
 		{
-            Debug.DrawLine(vertices[i], vertices[(i + 1) % vertices.Length], color);
+            Debug.DrawLine(vertices[i], vertices[(i + 1) % vertices.Length], colour);
             //DrawLine(vertices[i], vertices[(i+1) % vertices.Length], color);
 		}
+	}
+
+    public static void DrawProjectedAxis(Vector2 axis, Vector2[] vertices, Color color, int index = -1)
+	{
+        if (index != -1)
+		{
+            for (int i = 0; i < vertices.Length; i++)
+            {
+
+                Debug.DrawLine(vertices[i], axis, color);
+            }
+        }
+        else
+		{
+            Debug.DrawLine(vertices[index], axis, color);
+        }
+            
 	}
 }

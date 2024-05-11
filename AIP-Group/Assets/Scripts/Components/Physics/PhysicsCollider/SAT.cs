@@ -80,7 +80,7 @@ namespace MathU.Geometry
 			collision.intersection /= collision.normal.magnitude;
 			collision.normal = collision.normal.normalized;
 
-			Vector2 centerB = Centroid(vertices);
+			Vector2 centerB = Polygon.Centroid(vertices);
 
 			Vector2 direction = (!flip) ? centerB - circleCenter : circleCenter - centerB;
 
@@ -130,16 +130,8 @@ namespace MathU.Geometry
 
 		}
 
-		public static PhysicsEngine.PhysicsColliders.Collision IntersectPolygons(Vector2[] verticesA, Vector2[] verticesB)
+		public static void VisualizeSAT(Vector2[] verticesA, Vector2[] verticesB, int index)
 		{
-			//Debug.Log(verticesA.Length + " " + verticesB.Length);
-
-			PhysicsEngine.PhysicsColliders.Collision collision = new PhysicsEngine.PhysicsColliders.Collision();
-
-			collision.normal = Vector2.zero;
-			collision.intersection = float.MaxValue;
-
-			// iterate through both shapes
 			for (int i = 0; i < 2; i++)
 			{
 				Vector2[] vertices = (i == 0) ? verticesA : verticesB;
@@ -152,6 +144,40 @@ namespace MathU.Geometry
 					Vector2 edge = vB - vA;
 					Vector2 axis = new Vector2(-edge.y, edge.x);
 
+					if (j == PhysicsEngine.Engine.PhysicsEngine.step)
+					{
+						Debug.DrawLine(vB, vA, Color.red);
+
+						Debug.DrawLine(edge * 2, edge, Color.red);
+						Debug.DrawLine(axis, vA, Color.cyan);
+						Debug.DrawLine(axis, vB, Color.cyan);
+
+						Debug.DrawLine(edge, axis, Color.cyan);
+					}
+
+					SAT.ProjectVertices(verticesA, axis, out float minA, out float maxA);
+					SAT.ProjectVertices(verticesB, axis, out float minB, out float maxB);
+
+				}
+			}
+		}
+
+		public static PhysicsEngine.PhysicsColliders.Collision IntersectPolygons(Vector2[] verticesA, Vector2[] verticesB)
+		{
+			PhysicsEngine.PhysicsColliders.Collision collision = new PhysicsEngine.PhysicsColliders.Collision();
+
+			// iterate through both shapes
+			for (int i = 0; i < 2; i++)
+			{
+				Vector2[] vertices = (i == 0) ? verticesA : verticesB;
+				for (int j = 0; j < vertices.Length; j++)
+				{
+					Vector2 vA = vertices[j]; // polygon A
+					Vector2 vB = vertices[(j + 1) % vertices.Length]; // polygon B, wraps around
+
+					Vector2 edge = vB - vA;
+					Vector2 axis = new Vector2(-edge.y, edge.x); // perpendicular to edge
+
 					SAT.ProjectVertices(verticesA, axis, out float minA, out float maxA);
 					SAT.ProjectVertices(verticesB, axis, out float minB, out float maxB);
 
@@ -162,25 +188,25 @@ namespace MathU.Geometry
 					}
 
 					float axisDepth = Mathf.Min(maxB - minA, maxA - minB);
-
 					if (axisDepth < collision.intersection)
 					{
 						collision.intersection = axisDepth;
 						collision.normal = axis;
 					}
-					 
 				}
 			}
 
+			// If we've come this far, then there's intersection between the two shapes.
 			collision.Colliding = true;
 			collision.intersection /= collision.normal.magnitude;
 			collision.normal = collision.normal.normalized;
 
-			Vector2 centerA = Centroid(verticesA);
-			Vector2 centerB = Centroid(verticesB);
+			Vector2 centerA = Polygon.Centroid(verticesA);
+			Vector2 centerB = Polygon.Centroid(verticesB);
 
 			Vector2 direction = centerB - centerA;
 
+			// Prevent tunneling if one shape is on other side.
 			if (Vector2.Dot(direction, collision.normal) < 0f)
 			{
 				collision.normal = -collision.normal;
@@ -189,23 +215,6 @@ namespace MathU.Geometry
 			return collision;
 		}
 
-		private static Vector2 Centroid(Vector2[] vertices)
-		{
-			
-			float sumX = 0;
-			float sumY = 0;
-			
-			for (int i = 0; i < vertices.Length; i++)
-			{
-				Vector2 v = vertices[i];
-				sumX += v.x;
-				sumY += v.y;
-			}
-
-			Vector2 centroid = new Vector2(sumX / vertices.Length, sumY / vertices.Length);
-
-			return centroid;
-		}
 		public static void ProjectVertices(Vector2[] vertices, Vector2 axis, out float min, out float max)
 		{
 			min = float.MaxValue;
@@ -219,12 +228,6 @@ namespace MathU.Geometry
 
 				if (projection < min) { min = projection; }
 				if (projection > max) { max = projection; }
-
-				if (PhysicsConfig.debugMode)
-				{
-
-				}
-				PhysicsDebug.DrawLine(v, axis, Color.magenta);
 			}
 		}
 	}

@@ -39,12 +39,12 @@ public class PlayerControl : MonoBehaviour
 
     private void isColliding(PhysicsEngine.PhysicsColliders.Collision collision)
 	{
-        Debug.Log("COLLIDING");
+        //Debug.Log("COLLIDING");
 	}
 
     private void isTriggering(PhysicsEngine.PhysicsColliders.Collision collision)
 	{
-        Debug.Log("TRIGGER");
+        //Debug.Log("TRIGGER");
     }
 
     // Start is called before the first frame update

@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6852966701245709472}
-  - component: {fileID: -367865873548754157}
+  - component: {fileID: -8750591228144074938}
   - component: {fileID: -4503908474306073913}
   - component: {fileID: 8544413179617356846}
   - component: {fileID: 5094854633799931137}
@@ -31,12 +31,12 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &-367865873548754157
+--- !u!114 &-8750591228144074938
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -48,6 +48,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e07e878a6ccbf4e4aad7055148378dbf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  boidType: 0
+  parentFlock: {fileID: 0}
+  Velocity: {x: 0, y: 0}
 --- !u!114 &-4503908474306073913
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -66,10 +69,11 @@ MonoBehaviour:
   - {x: 0, y: 0.2}
   - {x: -0.5, y: 0}
   transformedVertices:
-  - {x: 0, y: 1}
-  - {x: 0.5, y: 0}
   - {x: 0, y: 0.2}
-  - {x: -0.5, y: 0}
+  - {x: 0.1, y: 0}
+  - {x: 0, y: 0.040000003}
+  - {x: -0.1, y: 0}
+  step: 0
 --- !u!114 &8544413179617356846
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -110,8 +114,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   colliderShape: 4
   isTrigger: 0
+  scale: {x: 1, y: 1, z: 1}
   collidingObjects: []
   requiresUpdate: 0
+  colliding:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!120 &5735010030635683636
 LineRenderer:
   serializedVersion: 2
@@ -155,11 +163,11 @@ LineRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Positions:
-  - {x: 0, y: 1, z: 0}
-  - {x: 0.5, y: 0, z: 0}
   - {x: 0, y: 0.2, z: 0}
-  - {x: -0.5, y: 0, z: 0}
-  - {x: 0, y: 1, z: 0}
+  - {x: 0.1, y: 0, z: 0}
+  - {x: 0, y: 0.040000003, z: 0}
+  - {x: -0.1, y: 0, z: 0}
+  - {x: 0, y: 0.2, z: 0}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 1

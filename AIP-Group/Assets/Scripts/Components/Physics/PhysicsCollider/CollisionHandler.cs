@@ -233,7 +233,7 @@ namespace PhysicsEngine.PhysicsColliders
         public PhysicsCollider colliderB;
 
         public Vector3 normal = Vector3.zero; // the direction to push the colliding objects away.
-        public float intersection = 0; // the area of intersection.
+        public float intersection = float.MaxValue; // the area of intersection.
         public bool Colliding = true;
 
         public void Resolve()

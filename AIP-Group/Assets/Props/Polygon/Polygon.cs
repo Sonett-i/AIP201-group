@@ -74,17 +74,59 @@ public class Polygon : MonoBehaviour
         }
     }
 
+    public int step = 0;
+
+    IEnumerator Stepper()
+	{
+        step = 0;
+        while (step <= transformedVertices.Length)
+		{
+            yield return new WaitForSeconds(1f);
+            step++;
+        }
+        StartCoroutine(Stepper());
+	}
+
+    void VisualizePolygon()
+	{
+        Vector2 centroid = Polygon.Centroid(transformedVertices);
+
+        for (int j = 0; j < transformedVertices.Length; j++)
+        {
+            Vector2 vA = transformedVertices[j]; // vertex A
+            Vector2 vB = transformedVertices[(j + 1) % transformedVertices.Length]; // vertex B
+
+            Vector2 edge = vB - vA;
+            Vector2 axis = new Vector2(-edge.y, edge.x);
+
+            if (j == step)
+			{
+                Debug.DrawLine(vA, axis, Color.cyan);
+                Debug.DrawLine(vB, axis, Color.cyan);
+
+                Debug.DrawLine(axis * 5f, -axis*5f, Color.white);
+                Debug.DrawLine(Vector2.Dot(vA, axis) * axis, vA, Color.green);
+                Debug.DrawLine(Vector2.Dot(vB, axis) * axis, vB, Color.green);
+            }
+
+            //Debug.DrawLine(centroid, edge, Color.cyan); 
+
+        }
+    }
+
     // Start is called before the first frame update
     void Start()
     {
         lineRenderer = GetComponent<LineRenderer>();
         polygonCollider = (PolygonCollider) this.GetComponent<PhysicsCollider>().collisionGeometry;
+        //StartCoroutine(Stepper());
     }
 
     // Update is called once per frame
     void Update()
     {
         DrawLines();
+        //VisualizePolygon();
     }
 
 	private void OnValidate()
@@ -98,5 +140,22 @@ public class Polygon : MonoBehaviour
     {
         DrawLines();
         PhysicsDebug.DrawPolygon(transformedVertices, Color.magenta);
+    }
+
+    public static Vector2 Centroid(Vector2[] vertices)
+    {
+        float sumX = 0;
+        float sumY = 0;
+
+        for (int i = 0; i < vertices.Length; i++)
+        {
+            Vector2 v = vertices[i];
+            sumX += v.x;
+            sumY += v.y;
+        }
+
+        Vector2 centroid = new Vector2(sumX / vertices.Length, sumY / vertices.Length);
+
+        return centroid;
     }
 }

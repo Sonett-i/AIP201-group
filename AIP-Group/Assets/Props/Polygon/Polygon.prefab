@@ -58,6 +58,7 @@ MonoBehaviour:
   - {x: -3.4499998, y: -1}
   - {x: -5.45, y: -1}
   - {x: -5.45, y: 1}
+  step: 0
 --- !u!114 &2880502616508210848
 MonoBehaviour:
   m_ObjectHideFlags: 0
