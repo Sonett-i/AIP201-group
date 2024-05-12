@@ -162,7 +162,8 @@ public class Boid : MonoBehaviour
         //Vector2 attraction = Attraction(boids);
 
         acceleration = (alignmentAmount * alignment) + (separationAmount * separation) + (cohesionAmount * cohesion);
-	}
+
+    }
 
     private void UpdateVelocity()
 	{
