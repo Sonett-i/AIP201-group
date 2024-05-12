@@ -1,90 +1,168 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using PhysicsEngine.PhysicsBodies;
-using PhysicsEngine.PhysicsColliders;
 
 public class Boid : MonoBehaviour
 {
-    public enum BoidType
-	{
-        BOID_NORMAL,
-        BOID_PREDATOR
-	}
+    public Vector3 baseRotation;
 
-    public PhysicsBody physicsBody;
-    PhysicsCollider physicsCollider;
-    [SerializeField] BoidType boidType = BoidType.BOID_NORMAL;
+    BoidController controller;
+    PhysicsBody physicsBody;
 
-    public Flock parentFlock;
+    [Range(0, 10)]
+    public float maxSpeed = 1f;
 
-    public Vector2 Velocity;
+    [Range(.1f, .5f)]
+    public float maxForce = .03f;
 
-    public float maxSpeed = 5;
-    public float minSpeed = 3;
+    [Range(1, 10)]
+    public float neighborhoodRadius = 3f;
 
-    public List<Boid> Neighbors(float distance)
-	{
-        if (parentFlock != null)
-		{
-            List<Boid> neighbors = new List<Boid>();
-            foreach (Boid boid in parentFlock.Boids)
-			{
-                if (Vector2.Distance(this.transform.position, boid.transform.position) < distance)
-                    neighbors.Add(boid);
-			}
-            return neighbors;
-		}
-        return null;
-	}
+    [Range(0, 3)]
+    public float separationAmount = 1f;
 
-    public void MoveForward()
-	{
-        float speed = Velocity.magnitude;
-        Debug.Log(Velocity);
-        if (speed > maxSpeed)
-        {
-            Velocity.x = (Velocity.x / speed) * maxSpeed;
-            Velocity.y = (Velocity.y / speed) * maxSpeed;
-        }
-        else if (speed < minSpeed)
-        {
-            Velocity.x = (Velocity.x / speed) * minSpeed;
-            Velocity.y = (Velocity.y / speed) * minSpeed;
-        }
+    [Range(0, 3)]
+    public float cohesionAmount = 1f;
 
-        if (float.IsNaN(Velocity.x) || float.IsNaN(Velocity.y))
-            Velocity = Vector2.zero;
+    [Range(0, 3)]
+    public float alignmentAmount = 1f;
 
-        physicsBody.AddForce(Velocity, PhysicsBody.ForceType.Impulse);
-	}
+    public Vector2 acceleration;
+    public Vector2 velocity;
 
-    public float getDistance(Boid neighbor)
-	{
-        float distance = Mathf.Abs((neighbor.transform.position - this.transform.position).magnitude);
-
-        return distance;
-	}
-
-    public void rotate(Vector3 rotation)
+    private Vector2 Position
     {
-        float angle = Mathf.Atan2(rotation.y, rotation.x) * Mathf.Rad2Deg;
-        transform.rotation = Quaternion.Euler(0f, 0f, angle);
+        get
+        {
+            return gameObject.transform.position;
+        }
+        set
+        {
+            gameObject.transform.position = value;
+        }
     }
+
+    List<Boid> Neighbors()
+	{
+        List<Boid> neighbors = new List<Boid>();
+
+        foreach (Boid boid in controller.boids)
+		{
+            float radii = neighborhoodRadius + boid.neighborhoodRadius;
+            float distance = (boid.Position - this.Position).magnitude;
+            if (distance <= radii)
+			{
+                neighbors.Add(boid);
+			}
+
+		}
+
+        return neighbors;
+	}
+
+    private Vector2 Alignment(IEnumerable<Boid> boids)
+	{
+        Vector2 velocity = Vector2.zero;
+
+        if (!boids.Any())
+            return velocity;
+
+        foreach (Boid boid in boids)
+		{
+            velocity += boid.velocity;
+		}
+
+        velocity /= boids.Count();
+
+        Vector2 steer = Vector2.zero;
+
+        return steer;
+	}
+
+
+
+    private Vector2 Steer(Vector2 direction)
+	{
+        Vector2 steer = direction - velocity;
+        steer = LimitMagnitude(steer, maxForce);
+
+        return steer;
+
+	}
+    private void Flock(IEnumerable<Boid> boids)
+	{
+        Vector2 alignment = Alignment(boids);
+        Vector2 Separation = Vector2.one;
+        Vector2 cohesion = Vector2.one;
+
+        acceleration = (alignmentAmount * alignment) + (separationAmount * Separation) + (cohesionAmount * cohesion);
+	}
+
+    private void UpdateVelocity()
+	{
+        velocity += acceleration;
+        velocity = LimitMagnitude(velocity, maxSpeed);
+
+        physicsBody.AddForce(velocity, PhysicsBody.ForceType.Impulse);
+	}
+    private void UpdateRotation()
+	{
+        float angle = Mathf.Atan2(velocity.y, velocity.x) * Mathf.Rad2Deg;
+        transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle) + baseRotation);
+	}
+
+	#region HelperFunctions
+
+    private Vector2 LimitMagnitude(Vector2 vector, float maxMagnitude)
+	{
+        if (vector.sqrMagnitude > maxMagnitude * maxMagnitude)
+		{
+            vector = vector.normalized * maxMagnitude;
+		}
+
+        return vector;
+	}
+    private float DistanceTo(Boid boid)
+	{
+        return Vector3.Distance(boid.transform.position, Position);
+	}
+
+    private void WrapAround()
+    {
+        if (Position.x < -14) Position = new Vector2(14, Position.y);
+        if (Position.y < -8) Position = new Vector2(Position.x, 8);
+        if (Position.x > 14) Position = new Vector2(-14, Position.y);
+        if (Position.y > 8) Position = new Vector2(Position.x, -8);
+
+        this.transform.position = Position;
+    }
+
+    #endregion
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
-        physicsBody = GetComponent<PhysicsBody>();
-        physicsCollider = GetComponent<PhysicsCollider>();
+        controller = GameObject.FindObjectOfType<BoidController>();
+        physicsBody = this.GetComponent<PhysicsBody>();
+
+        float angle = Random.Range(0, 2 * Mathf.PI);
+
+        transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle) + baseRotation);
+        velocity = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
     }
 
-	private void OnDestroy()
-	{
-        //GameObject.FindObjectOfType<PhysicsEngine.Engine.PhysicsEngine>().RemoveFromList(physicsBody);
-        if (parentFlock != null)
-		{
-            parentFlock.RemoveBoid(this);
-		}
-	}
+    // Update is called once per frame
+    void Update()
+    {
+        List<Boid> boids = Neighbors();
+        boids.Remove(this);
+
+        Flock(boids);
+        UpdateVelocity();
+        UpdateRotation();
+        WrapAround();
+
+    }
 }

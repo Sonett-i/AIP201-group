@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3003830611278373548}
-  - component: {fileID: 1178539925657183869}
   m_Layer: 0
   m_Name: Flock
   m_TagString: Untagged
@@ -32,20 +31,3 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1178539925657183869
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3062218069684303820}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e7f74433e6380844e86309e5523193a8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  boid: {fileID: 2591603002790019249, guid: 90ea7ce19c52a0c48b826cd1b76c5ff2, type: 3}
-  Width: 0
-  Height: 0
-  Boids: []
-  numBoids: 5

@@ -177,7 +177,7 @@ namespace PhysicsEngine.Engine
                 //HandleGravity();
                 UpdatePositions();
                 UpdateCollisions();
-                HandleInput();
+                //HandleInput();
             }
         }
 

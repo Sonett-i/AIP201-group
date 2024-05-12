@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6852966701245709472}
-  - component: {fileID: -8750591228144074938}
+  - component: {fileID: 8538229926474112369}
   - component: {fileID: -4503908474306073913}
   - component: {fileID: 8544413179617356846}
   - component: {fileID: 5094854633799931137}
@@ -36,7 +36,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &-8750591228144074938
+--- !u!114 &8538229926474112369
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -48,12 +48,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e07e878a6ccbf4e4aad7055148378dbf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  physicsBody: {fileID: 0}
-  boidType: 0
-  parentFlock: {fileID: 0}
-  Velocity: {x: 0, y: 0}
-  maxSpeed: 5
-  minSpeed: 3
+  baseRotation: {x: 0, y: 0, z: 0}
+  maxSpeed: 1
+  maxForce: 0.03
+  neighborhoodRadius: 3
+  separationAmount: 1
+  cohesionAmount: 1
+  alignmentAmount: 1
+  acceleration: {x: 0, y: 0}
+  velocity: {x: 0, y: 0}
 --- !u!114 &-4503908474306073913
 MonoBehaviour:
   m_ObjectHideFlags: 0
