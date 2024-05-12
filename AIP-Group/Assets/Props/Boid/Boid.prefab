@@ -55,7 +55,7 @@ MonoBehaviour:
   separationAmount: 1.7
   cohesionAmount: 1
   alignmentAmount: 1
-  attractionAmount: 0
+  attractionAmount: 5
   acceleration: {x: 0, y: 0}
   velocity: {x: 0, y: 0}
   bounds: {x: 14, y: 9}

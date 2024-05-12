@@ -128,7 +128,7 @@ public class Boid : MonoBehaviour
         return steer;
     }
 
-    private Vector2 Attraction(IEnumerable<Boid> boids)
+    private Vector2 Repel(IEnumerable<Boid> boids)
 	{
         if (!boids.Any())
             return Vector2.zero;
@@ -137,7 +137,7 @@ public class Boid : MonoBehaviour
 
         foreach(Boid boid in boids)
 		{
-            direction += (mousePosition - Position);
+            direction += (Position - mousePosition);
 		}
 
         Vector2 steer = Steer(direction * maxSpeed);
@@ -159,9 +159,9 @@ public class Boid : MonoBehaviour
         Vector2 alignment = Alignment(boids);
         Vector2 separation = Separation(boids);
         Vector2 cohesion = Cohesion(boids);
-        Vector2 attraction = Attraction(boids);
+        Vector2 repel = Repel(boids); // repel from mouse/predator
 
-        acceleration = (alignmentAmount * alignment) + (separationAmount * separation) + (cohesionAmount * cohesion) + (attractionAmount * attraction);
+        acceleration = (alignmentAmount * alignment) + (separationAmount * separation) + (cohesionAmount * cohesion) + (attractionAmount * repel);
     }
 
     private void UpdateVelocity()
@@ -218,7 +218,7 @@ public class Boid : MonoBehaviour
 
         transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle) + baseRotation);
         velocity = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
-        mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        
     }
 
     // Update is called once per frame
@@ -226,6 +226,7 @@ public class Boid : MonoBehaviour
     {
         List<Boid> boids = Neighbors();
         boids.Remove(this);
+        mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
         Flock(boids);
         UpdateVelocity();
