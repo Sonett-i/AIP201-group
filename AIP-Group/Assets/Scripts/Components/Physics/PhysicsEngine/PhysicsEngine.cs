@@ -24,6 +24,18 @@ namespace PhysicsEngine.Engine
 
         public SimulationType simulationType;
 
+        public void AddToList(PhysicsBody physicsBody)
+		{
+            if (!physicsBodies.Contains(physicsBody))
+                physicsBodies.Add(physicsBody);
+		}
+
+        public void RemoveFromList(PhysicsBody physicsBody)
+		{
+            if (physicsBodies.Contains(physicsBody))
+                physicsBodies.Remove(physicsBody);
+		}
+
         void UpdateVelocity()
         {
             foreach (PhysicsBody body in physicsBodies)

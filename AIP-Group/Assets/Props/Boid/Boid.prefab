@@ -48,9 +48,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e07e878a6ccbf4e4aad7055148378dbf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  physicsBody: {fileID: 0}
   boidType: 0
   parentFlock: {fileID: 0}
   Velocity: {x: 0, y: 0}
+  maxSpeed: 5
+  minSpeed: 3
 --- !u!114 &-4503908474306073913
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -92,9 +95,9 @@ MonoBehaviour:
   Acceleration: {x: 0, y: 0, z: 0}
   Rotation: 0
   RotationalVelocity: 0
-  Density: 0
-  Mass: 0
-  InverseMass: Infinity
+  Density: 1
+  Mass: 0.4
+  InverseMass: 2.5
   Restitution: 0
   Area: 0.4
   Radius: 0
