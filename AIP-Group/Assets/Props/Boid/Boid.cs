@@ -29,6 +29,9 @@ public class Boid : MonoBehaviour
     [Range(0, 3)]
     public float alignmentAmount = 1f;
 
+    [Range(0, 10)]
+    public float attractionAmount = 3f;
+
     public Vector2 acceleration;
     public Vector2 velocity;
 
@@ -43,6 +46,10 @@ public class Boid : MonoBehaviour
             gameObject.transform.position = value;
         }
     }
+
+
+    // User Input
+    Vector2 mousePosition;
 
     List<Boid> Neighbors()
 	{
@@ -76,12 +83,67 @@ public class Boid : MonoBehaviour
 
         velocity /= boids.Count();
 
-        Vector2 steer = Vector2.zero;
+        Vector2 steer = Steer(velocity.normalized * maxSpeed);
 
         return steer;
 	}
 
+    private Vector2 Cohesion(IEnumerable<Boid> boids)
+	{
+        if (!boids.Any()) 
+            return Vector2.zero;
 
+        Vector2 sumPositions = Vector2.zero;
+
+        foreach(Boid boid in boids)
+		{
+            sumPositions += boid.Position;
+		}
+
+        Vector2 mean = sumPositions / boids.Count();
+        Vector2 direction = mean - Position;
+
+        Vector2 steer = Steer(direction.normalized * maxSpeed);
+
+        return steer;
+	}
+
+    private Vector2 Separation(IEnumerable<Boid> boids)
+	{
+        Vector2 direction = Vector2.zero;
+        boids = boids.Where(o => DistanceTo(o) <= neighborhoodRadius / 2);
+
+        if (!boids.Any())
+            return direction;
+
+        foreach (Boid boid in boids)
+		{
+            Vector2 difference = Position - boid.Position;
+            direction += difference.normalized / difference.magnitude;
+		}
+        direction /= boids.Count();
+
+        Vector2 steer = Steer(direction.normalized * maxSpeed);
+
+        return steer;
+    }
+
+    private Vector2 Attraction(IEnumerable<Boid> boids)
+	{
+        if (!boids.Any())
+            return Vector2.zero;
+
+        Vector2 direction = Vector2.zero;
+
+        foreach(Boid boid in boids)
+		{
+            direction += (mousePosition - Position);
+		}
+
+        Vector2 steer = Steer(direction * maxSpeed);
+
+        return steer;
+	}
 
     private Vector2 Steer(Vector2 direction)
 	{
@@ -91,13 +153,15 @@ public class Boid : MonoBehaviour
         return steer;
 
 	}
+
     private void Flock(IEnumerable<Boid> boids)
 	{
         Vector2 alignment = Alignment(boids);
-        Vector2 Separation = Vector2.one;
-        Vector2 cohesion = Vector2.one;
+        Vector2 separation = Separation(boids);
+        Vector2 cohesion = Cohesion(boids);
+        //Vector2 attraction = Attraction(boids);
 
-        acceleration = (alignmentAmount * alignment) + (separationAmount * Separation) + (cohesionAmount * cohesion);
+        acceleration = (alignmentAmount * alignment) + (separationAmount * separation) + (cohesionAmount * cohesion);
 	}
 
     private void UpdateVelocity()
@@ -105,12 +169,12 @@ public class Boid : MonoBehaviour
         velocity += acceleration;
         velocity = LimitMagnitude(velocity, maxSpeed);
 
-        physicsBody.AddForce(velocity, PhysicsBody.ForceType.Impulse);
+        physicsBody.LinearVelocity = velocity;
 	}
     private void UpdateRotation()
 	{
         float angle = Mathf.Atan2(velocity.y, velocity.x) * Mathf.Rad2Deg;
-        transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle) + baseRotation);
+        transform.rotation = Quaternion.Euler(0f, 0f, -angle + 90);
 	}
 
 	#region HelperFunctions
@@ -129,12 +193,14 @@ public class Boid : MonoBehaviour
         return Vector3.Distance(boid.transform.position, Position);
 	}
 
+    [SerializeField] Vector2 bounds = new Vector2(14, 8);
+
     private void WrapAround()
     {
-        if (Position.x < -14) Position = new Vector2(14, Position.y);
-        if (Position.y < -8) Position = new Vector2(Position.x, 8);
-        if (Position.x > 14) Position = new Vector2(-14, Position.y);
-        if (Position.y > 8) Position = new Vector2(Position.x, -8);
+        if (Position.x < -bounds.x) Position = new Vector2(bounds.x, Position.y);
+        if (Position.y < -bounds.y) Position = new Vector2(Position.x, -bounds.y);
+        if (Position.x > bounds.x) Position = new Vector2(-bounds.x, Position.y);
+        if (Position.y > bounds.y) Position = new Vector2(Position.x, -bounds.y);
 
         this.transform.position = Position;
     }
@@ -158,6 +224,8 @@ public class Boid : MonoBehaviour
     {
         List<Boid> boids = Neighbors();
         boids.Remove(this);
+
+        mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
         Flock(boids);
         UpdateVelocity();
