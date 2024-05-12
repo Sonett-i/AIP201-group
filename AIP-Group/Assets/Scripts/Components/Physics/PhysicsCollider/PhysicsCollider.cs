@@ -26,6 +26,7 @@ namespace PhysicsEngine.PhysicsColliders
         public Geometry.Shapes colliderShape = Geometry.Shapes.Circle;
         public bool isTrigger = false;
         [SerializeField] Vector3 scale = Vector3.zero;
+        bool initialized = false;
 
 		[Header("Debugging")]
         // Objects this collider is colliding with.
@@ -85,22 +86,45 @@ namespace PhysicsEngine.PhysicsColliders
             }
         }
 
-        // Start is called before the first frame update
-        void Start()
-        {
-            this.requiresUpdate = true;
-
+        void Initialize()
+		{
+            requiresUpdate = true;
 
             if (this.gameObject.GetComponent<PhysicsBody>())
             {
                 SetFromPhysicsBody();
             }
+
+            initialized = true;
+            StartCoroutine(Init());
+        }
+
+        IEnumerator Init()
+		{
+            yield return new WaitForSeconds(Time.deltaTime);
+            GameObject.FindAnyObjectByType<PhysicsEngine.Engine.PhysicsEngine>().AddToList(this.GetComponent<PhysicsBody>());
+            GameObject.FindAnyObjectByType<PhysicsEngine.Engine.PhysicsEngine>().AddToList(this);
+
+        }
+
+        // Start is called before the first frame update
+        void Start()
+        {
+            Initialize();
         }
 
         // Update is called once per frame
         void Update()
         {
-            this.collisionGeometry.Update(this.transform.position, scale, this.transform.rotation);
+            if (initialized)
+			{
+                this.collisionGeometry.Update(this.transform.position, scale, this.transform.rotation);
+                if (this.colliderShape == Geometry.Shapes.Polygon)
+				{
+                    this.collisionGeometry.UpdateGeometry(this.GetComponent<Polygon>().transformedVertices);
+				}
+            }
+            
         }
 
         private void OnValidate()

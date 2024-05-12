@@ -138,7 +138,7 @@ public class Polygon : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        DrawLines();
+        //DrawLines();
         PhysicsDebug.DrawPolygon(transformedVertices, Color.magenta);
     }
 

@@ -30,6 +30,12 @@ namespace PhysicsEngine.Engine
                 physicsBodies.Add(physicsBody);
 		}
 
+        public void AddToList(PhysicsCollider physicsCollider)
+        {
+            if (!physicsColliders.Contains(physicsCollider))
+                physicsColliders.Add(physicsCollider);
+        }
+
         public void RemoveFromList(PhysicsBody physicsBody)
 		{
             if (physicsBodies.Contains(physicsBody))
@@ -116,6 +122,39 @@ namespace PhysicsEngine.Engine
             initialized = true;
         }
 
+        [SerializeField] float stepDuration = 1.5f;
+        IEnumerator Stepper()
+        {
+            step = 0;
+            while (step < 4)
+            {
+                yield return new WaitForSeconds(stepDuration);
+                step++;
+            }
+            StartCoroutine(Stepper());
+        }
+        public static int step = 0;
+
+        [SerializeField] GameObject[] objects;
+        Vector3 mousePos;
+        Vector3 mouseWPos;
+        void HandleInput()
+		{
+            mousePos = Input.mousePosition;
+            mouseWPos = Camera.main.ScreenToWorldPoint(mousePos);
+
+            //Debug.Log($"{mousePos} {mouseWPos}");
+
+            if (Input.GetMouseButtonDown(0))
+			{
+                GameObject _obj = Instantiate(objects[Random.Range(0, objects.Length)]);
+
+                Vector2 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
+                _obj.transform.position = pos;
+			}
+		}
+
         // Start is called before the first frame update
         void Start()
         {
@@ -128,18 +167,7 @@ namespace PhysicsEngine.Engine
             StartCoroutine(Stepper());
         }
 
-        [SerializeField] float stepDuration = 1.5f;
-        IEnumerator Stepper()
-		{
-            step = 0;
-            while (step < 4)
-			{
-                yield return new WaitForSeconds(stepDuration);
-                step++;
-			}
-            StartCoroutine(Stepper());
-		}
-        public static int step = 0;
+
         // Update is called once per frame
         void Update()
         {
@@ -149,6 +177,7 @@ namespace PhysicsEngine.Engine
                 //HandleGravity();
                 UpdatePositions();
                 UpdateCollisions();
+                HandleInput();
             }
         }
 
