@@ -69,6 +69,12 @@ public class Boid : MonoBehaviour
         return distance;
 	}
 
+    public void rotate(Vector3 rotation)
+    {
+        float angle = Mathf.Atan2(rotation.y, rotation.x) * Mathf.Rad2Deg;
+        transform.rotation = Quaternion.Euler(0f, 0f, angle);
+    }
+
     // Start is called before the first frame update
     void Start()
     {

@@ -115,6 +115,8 @@ public class Flock : MonoBehaviour
         meanVelocity /= neighbors.Count;
         meanVelocity -= boid.Velocity;
 
+        boid.rotate(meanVelocity);
+
         return meanVelocity * power;
 	}
 
@@ -127,7 +129,7 @@ public class Flock : MonoBehaviour
         foreach (Boid neighbor in neighbors)
 		{
             float closeness = distance - boid.getDistance(neighbor);
-            separation += (Vector2) (boid.transform.position - neighbor.transform.position) * closeness;
+            separation += (Vector2) (neighbor.transform.position - boid.transform.position) * closeness;
 		}
 
         return separation * power;
@@ -141,8 +143,8 @@ public class Flock : MonoBehaviour
 
         float closeness = distance - ((Vector2)boid.transform.position - avoidMouse).magnitude;
 
-        separation.x = boid.transform.position.x - avoidMouse.x * closeness;
-        separation.y = boid.transform.position.y - avoidMouse.y * closeness;
+        separation = ((Vector2)boid.transform.position - avoidMouse) * closeness;
+
 
         return separation * power;
 	}
@@ -151,15 +153,12 @@ public class Flock : MonoBehaviour
     {
         foreach (Boid boid in Boids)
         {
-            Vector2 flockVelocity = Cohesion(boid, 5, .03f);
+            Vector2 flockVelocity = Cohesion(boid, 50, .03f);
             Vector2 flockAlignment = Alignment(boid, 10, 0.01f);
-            Vector2 flockSeparation = Separation(boid, 5, 0.1f);
+            Vector2 flockSeparation = Separation(boid, 50, 0.1f);
             Vector2 flockAvoidance = Avoid(boid, 2, .100f);
 
             boid.Velocity += flockVelocity + flockAlignment + flockSeparation + flockAvoidance;
-
-            boid.Velocity.x = Mathf.Clamp(boid.Velocity.x, -Width, Width);
-            boid.Velocity.y = Mathf.Clamp(boid.Velocity.y, -Height, Height);
 
             boid.MoveForward();
         }
