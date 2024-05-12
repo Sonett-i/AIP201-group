@@ -115,7 +115,6 @@ public class Flock : MonoBehaviour
         meanVelocity /= neighbors.Count;
         meanVelocity -= boid.Velocity;
 
-        boid.rotate(meanVelocity);
 
         return meanVelocity * power;
 	}
@@ -160,6 +159,7 @@ public class Flock : MonoBehaviour
 
             boid.Velocity += flockVelocity + flockAlignment + flockSeparation + flockAvoidance;
 
+            boid.rotate(boid.Velocity);
             boid.MoveForward();
         }
     }

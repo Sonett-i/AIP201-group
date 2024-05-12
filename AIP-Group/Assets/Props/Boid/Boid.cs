@@ -56,9 +56,6 @@ public class Boid : MonoBehaviour
         if (float.IsNaN(Velocity.x) || float.IsNaN(Velocity.y))
             Velocity = Vector2.zero;
 
-        
-
-        this.transform.localRotation = Quaternion.Euler(0, Velocity.y, 0);
         physicsBody.AddForce(Velocity, PhysicsBody.ForceType.Impulse);
 	}
 
