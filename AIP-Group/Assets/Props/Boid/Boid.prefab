@@ -52,10 +52,10 @@ MonoBehaviour:
   maxSpeed: 3
   maxForce: 0.03
   neighborhoodRadius: 3
-  separationAmount: 1.2
+  separationAmount: 1.7
   cohesionAmount: 1
   alignmentAmount: 1
-  attractionAmount: 3
+  attractionAmount: 0
   acceleration: {x: 0, y: 0}
   velocity: {x: 0, y: 0}
   bounds: {x: 14, y: 9}

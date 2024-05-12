@@ -159,10 +159,9 @@ public class Boid : MonoBehaviour
         Vector2 alignment = Alignment(boids);
         Vector2 separation = Separation(boids);
         Vector2 cohesion = Cohesion(boids);
-        //Vector2 attraction = Attraction(boids);
+        Vector2 attraction = Attraction(boids);
 
-        acceleration = (alignmentAmount * alignment) + (separationAmount * separation) + (cohesionAmount * cohesion);
-
+        acceleration = (alignmentAmount * alignment) + (separationAmount * separation) + (cohesionAmount * cohesion) + (attractionAmount * attraction);
     }
 
     private void UpdateVelocity()
@@ -172,6 +171,7 @@ public class Boid : MonoBehaviour
 
         physicsBody.LinearVelocity = velocity;
 	}
+
     private void UpdateRotation()
 	{
         float angle = Mathf.Atan2(velocity.y, velocity.x) * Mathf.Rad2Deg;
@@ -218,6 +218,7 @@ public class Boid : MonoBehaviour
 
         transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle) + baseRotation);
         velocity = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
+        mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
     }
 
     // Update is called once per frame
@@ -226,12 +227,9 @@ public class Boid : MonoBehaviour
         List<Boid> boids = Neighbors();
         boids.Remove(this);
 
-        mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-
         Flock(boids);
         UpdateVelocity();
         UpdateRotation();
         WrapAround();
-
     }
 }

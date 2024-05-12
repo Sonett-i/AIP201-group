@@ -173,7 +173,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5327665613311011090, guid: 0854cc2107d30614b9d5241a0e42a96a, type: 3}
       propertyPath: numBoids
-      value: 48
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 5327665613311011090, guid: 0854cc2107d30614b9d5241a0e42a96a, type: 3}
       propertyPath: boidPrefab
